@@ -222,6 +222,21 @@ function Instructions() {
           ))}
         </CardContent>
       </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-display">Library, hints and sessions</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm leading-relaxed">
+          <p>Bundled sets are listed in <code>public/quizzes/index.json</code>, grouped by lesson on the Load screen:</p>
+          <Code>{`[{ "id": "l3-vocab", "lesson": 3, "type": "vocabulary",
+   "url": "/quizzes/l3_vocab.json", "title": "Lesson 3 Vocabulary",
+   "description": "Optional" }]`}</Code>
+          <p>Tick several sets to combine them, then choose 10, 20, 50 or All questions — a random subset is drawn.</p>
+          <p><code>hint</code> (optional text) shows as a badge and as the typed-answer placeholder. <code>strict: true</code> requires an exact match (no typo tolerance).</p>
+          <p>IME users: Enter is ignored while Japanese input is still composing, so confirming a conversion never submits the answer.</p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "n5-kanji",
+    "lesson": 1,
+    "type": "kanji",
+    "url": "/quizzes/jlpt_n5_kanji_all.json",
+    "title": "JLPT N5 Kanji — Complete Set",
+    "description": "N5 kanji meanings and readings."
+  }
+]
