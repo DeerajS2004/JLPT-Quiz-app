@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useRef, useState } from "react";
-import { BookOpen, FileJson, Play, Upload } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { BookOpen, ChevronDown, Play, Upload } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -8,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { BUILT_IN_QUIZZES } from "@/lib/built-in-quizzes";
+import { fetchManifest, groupByLesson, mergeSets, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
 import { saveActive, saveStudySet, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
 
@@ -52,24 +54,42 @@ function LoadTest() {
     }
   }
 
-  async function loadBuiltIn(url: string) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("The bundled question set could not be loaded.");
-      const validated = validateQuestionSet(await response.json());
-      if (!validated.ok) {
-        toast.error("Invalid built-in question set", { description: validated.error });
-        return;
+  const [manifest, setManifest] = useState<ManifestEntry[]>([]);
+  const [counts, setCounts] = useState<Record<string, number | null>>({});
+  const [loaded, setLoaded] = useState<Record<string, QuestionSet>>({});
+  const [selected, setSelected] = useState<string[]>([]);
+  const [size, setSize] = useState<number | null>(null);
+
+  useEffect(() => {
+    void fetchManifest().then((entries) => {
+      setManifest(entries);
+      for (const e of entries) {
+        fetch(e.url)
+          .then((r) => (r.ok ? r.json() : Promise.reject()))
+          .then((json: unknown) => {
+            const v = validateQuestionSet(json);
+            if (v.ok) {
+              setLoaded((m) => ({ ...m, [e.id]: v.set }));
+              setCounts((c) => ({ ...c, [e.id]: v.set.questions.length }));
+            } else setCounts((c) => ({ ...c, [e.id]: null }));
+          })
+          .catch(() => setCounts((c) => ({ ...c, [e.id]: null })));
       }
-      useSet(validated.set);
-    } catch (error) {
-      toast.error("Failed to load question set", { description: error instanceof Error ? error.message : String(error) });
-    }
+    });
+  }, []);
+
+  function toggle(id: string, on: boolean) {
+    const next = on ? [...selected, id] : selected.filter((x) => x !== id);
+    setSelected(next);
+    const sources = next.flatMap((x) => (loaded[x] ? [{ id: x, set: loaded[x] }] : []));
+    if (sources.length) useSet(mergeSets(sources));
+    else setSet(null);
   }
 
   function start() {
     if (!set) return;
-    saveActive({ set, startedAt: Date.now(), durationSec: duration * 60, answers: [], currentIndex: 0 });
+    const picked = pickQuestions(set, size);
+    saveActive({ set: picked, startedAt: Date.now(), durationSec: duration * 60, answers: [], currentIndex: 0 });
     void navigate({ to: "/quiz" });
   }
 
@@ -113,14 +133,38 @@ function LoadTest() {
             <CardDescription>Included with the app and available offline.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            {BUILT_IN_QUIZZES.map((quiz) => (
-              <Button key={quiz.id} variant="outline" className="h-auto w-full justify-start gap-3 p-3 text-left" onClick={() => void loadBuiltIn(quiz.url)}>
-                <FileJson className="h-4 w-4 shrink-0 text-hanko" />
-                <span className="min-w-0 whitespace-normal">
-                  <span className="block font-medium">{quiz.title}</span>
-                  <span className="block text-xs font-normal text-muted-foreground">{quiz.description}</span>
-                </span>
-              </Button>
+            {groupByLesson(manifest).map(([lesson, entries], gi) => (
+              <Collapsible key={lesson} defaultOpen={gi === 0} className="rounded-md border">
+                <CollapsibleTrigger className="group flex w-full items-center justify-between px-3 py-2 font-display text-sm font-semibold">
+                  Lesson {lesson}
+                  <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]:rotate-180" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="space-y-1 px-3 pb-3">
+                  {entries.map((quiz) => {
+                    const count = counts[quiz.id];
+                    return (
+                      <label key={quiz.id} className="flex cursor-pointer items-start gap-3 rounded-md p-2 hover:bg-secondary/60">
+                        <Checkbox
+                          className="mt-0.5"
+                          disabled={count === null || count === undefined}
+                          checked={selected.includes(quiz.id)}
+                          onCheckedChange={(v) => toggle(quiz.id, v === true)}
+                        />
+                        <span className="min-w-0">
+                          <span className="block font-medium">{quiz.title}</span>
+                          <span className="mt-1 flex flex-wrap gap-1">
+                            <Badge variant="outline" className="text-[11px] capitalize">{quiz.type}</Badge>
+                            <Badge variant="secondary" className="text-[11px]">
+                              {count === undefined ? "Loading…" : count === null ? "Unavailable" : `${count} questions`}
+                            </Badge>
+                          </span>
+                          {quiz.description && <span className="mt-1 block text-xs text-muted-foreground">{quiz.description}</span>}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </CollapsibleContent>
+              </Collapsible>
             ))}
           </CardContent>
         </Card>
@@ -143,6 +187,16 @@ function LoadTest() {
               <div className="mt-3 flex items-center gap-4">
                 <Slider id="duration" min={1} max={60} step={1} value={[duration]} onValueChange={(value) => setDuration(value[0] ?? 15)} />
                 <div className="w-16 text-right font-display text-lg tabular-nums">{duration}m</div>
+              </div>
+            </div>
+            <div>
+              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Number of questions</Label>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[10, 20, 50, null].map((n) => (
+                  <Button key={String(n)} type="button" size="sm" variant={size === n ? "default" : "outline"} onClick={() => setSize(n)}>
+                    {n ?? "All"}
+                  </Button>
+                ))}
               </div>
             </div>
             <div className="flex flex-wrap justify-end gap-3">
