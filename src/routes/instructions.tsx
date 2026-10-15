@@ -135,7 +135,7 @@ function Instructions() {
             <li>Set the time limit and press <strong>Start session</strong>.</li>
             <li>Answer each question without seeing the correct answer during the test. Typed answers accept listed alternatives and small spelling differences.</li>
             <li>At the end, review every answer on the <Link to="/results" className="text-hanko underline-offset-4 hover:underline">Results</Link> screen.</li>
-            <li>For untimed practice, choose <Link to="/study" className="text-hanko underline-offset-4 hover:underline">Study</Link> from the sidebar. Reveal the answer and explanation one question at a time.</li>
+            <li>Choose <Link to="/study" className="text-hanko underline-offset-4 hover:underline">Study</Link> from the sidebar for a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring.</li>
             <li>Your latest five detailed results are saved on this device. Removing one does not change lifetime statistics.</li>
           </ol>
           <div className="pt-2">
@@ -232,9 +232,10 @@ function Instructions() {
           <Code>{`[{ "id": "l3-vocab", "lesson": 3, "type": "vocabulary",
    "url": "/quizzes/l3_vocab.json", "title": "Lesson 3 Vocabulary",
    "description": "Optional" }]`}</Code>
+          <p>Each manifest entry has a unique <code>id</code>, a numeric <code>lesson</code>, a question <code>type</code>, a JSON file <code>url</code>, a <code>title</code>, and an optional <code>description</code>.</p>
           <p>Tick several sets to combine them, then choose 10, 20, 50 or All questions — a random subset is drawn.</p>
           <p><code>hint</code> (optional text) shows as a badge and as the typed-answer placeholder. <code>strict: true</code> requires an exact match (no typo tolerance).</p>
-          <p>IME users: Enter is ignored while Japanese input is still composing, so confirming a conversion never submits the answer.</p>
+          <p>Pressing Enter while the Japanese IME is composing does not submit the answer.</p>
         </CardContent>
       </Card>
     </div>

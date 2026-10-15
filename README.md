@@ -13,7 +13,7 @@ A calm, sidebar-driven JLPT (N5–N1) mock-test app with the hush and precision 
 - **Configurable timer** — simulate real exam pressure (or turn it off)
 - **No-spoiler quiz flow** — answers stay hidden until the end
 - **Typed-answer questions** — grade English, Japanese, and other language answers locally against accepted alternatives, with cautious typo tolerance
-- **Study mode** — review one question at a time and reveal its answer and explanation without a timer or score
+- **Study mode** — a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring
 - **Tabbed review** — Wrong / Correct / All on the results screen, defaulting to Wrong
 - **Keyboard shortcuts** — `1–4` to pick an option, `← / →` to navigate, `Enter` to confirm
 - **Lifetime statistics** — accuracy, streaks, per-category progress bars, session history
@@ -69,7 +69,7 @@ For typed answers, include accepted alternatives instead of asking for an exact 
 
 Grading happens entirely on the device. It normalizes Unicode form, capitalization, spaces, and punctuation, then allows only a small number of spelling differences for longer answers. It does not infer synonyms or semantic equivalence; add valid alternatives to `correctAnswers`.
 
-Choose **Study set** after loading a file to enter the separate study section. Answers and explanations are revealed on request, and the selected set remains available locally after restarting the app.
+Choose **Study set** after loading a file to enter the separate study section. Every question, answer, and explanation appears on one searchable scrolling page, without a timer or scoring. The selected set remains available locally after restarting the app.
 
 A sample set lives at `public/quizzes/jlpt_n5_kanji_all.json` (110 N5 kanji questions).
 
@@ -153,9 +153,9 @@ For a proper `.msi` / `.dmg` installer you'll want `electron-builder` on Windows
 
 ---
 
-## Releases via GitHub Actions (Linux)
+## Releases via GitHub Actions (Linux and Windows)
 
-`.github/workflows/release.yml` builds a Linux Electron package on GitHub's cloud runners and attaches it to a GitHub Release. Push a `v*` tag to trigger it:
+`.github/workflows/build.yml` builds Linux AppImage and `.deb` packages plus a Windows `.exe` installer, then uploads them directly to GitHub Releases, not Actions artifacts. Push a `v*` tag to trigger it:
 
 ```bash
 # bump "version" in package.json
@@ -163,7 +163,7 @@ git tag v0.1.1
 git push origin v0.1.1
 ```
 
-The workflow runs on `ubuntu-22.04` (matches Pop!_OS 22.04's glibc), installs deps with `bun install`, runs `bun run build`, then packages with `electron-packager` and uploads a `JLPT-Practice-linux-x64.tar.gz` to the repo's **Releases** page.
+You can also run **Build Desktop Apps** manually from the repository's Actions tab. Supply a release tag, or leave it empty to use `v` followed by the version in `package.json`. The workflow creates the release if needed and replaces same-named downloads when rerun. Linux and Windows build on their respective GitHub runners using `bun run electron:dist`; downloads appear as each build finishes, not when the workflow first starts.
 
 No secrets needed — the workflow uses the auto-provisioned `GITHUB_TOKEN`.
 
@@ -187,7 +187,7 @@ No secrets needed — the workflow uses the auto-provisioned `GITHUB_TOKEN`.
 │   │   ├── study.tsx           # untimed question review
 │   │   └── instructions.tsx
 │   └── styles.css              # Paper & Hanko design tokens
-└── .github/workflows/release.yml  # tag-triggered Linux Electron build
+└── .github/workflows/build.yml    # tag/manual Linux and Windows releases
 ```
 
 ---
