@@ -1,0 +1,7 @@
+- [x] Remove Gemini and MCP integrations; keep the app offline.
+- [x] Add local typed-answer grading and update imported question validation.
+- [x] Add a dedicated study view for the selected local question set.
+- [x] Keep full details for only five results; allow deleting a result without changing lifetime stats.
+- [x] Update navigation, instructions, and README; verify practice and study flows.
+- [x] Add IME-safe typed input, optional hints, and strict normalized grading.
+- [x] Replace Study flashcards with a searchable, all-questions reference page.

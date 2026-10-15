@@ -1,0 +1,58 @@
+name: Build Desktop Apps
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: linux
+          - os: windows-latest
+            name: windows
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      # bun install (not --frozen-lockfile) on Windows to avoid a known
+      # optional-dependency bug where platform-specific native binaries
+      # (e.g. Rolldown's win32-x64-msvc binding used by Vite 8) get skipped
+      # if the lockfile wasn't generated to include every platform.
+      - name: Install dependencies (Linux)
+        if: matrix.name == 'linux'
+        run: bun install
+
+      - name: Install dependencies (Windows)
+        if: matrix.name == 'windows'
+        run: bun install
+
+      - name: Build desktop distributables
+        run: bun run electron:dist
+
+      - name: Upload Linux AppImage
+        if: matrix.name == 'linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: jlpt-practice-linux-appimage
+          path: electron-release/*.AppImage
+          if-no-files-found: error
+
+      - name: Upload Windows installer
+        if: matrix.name == 'windows'
+        uses: actions/upload-artifact@v4
+        with:
+          name: jlpt-practice-windows-exe
+          path: electron-release/*.exe
+          if-no-files-found: error

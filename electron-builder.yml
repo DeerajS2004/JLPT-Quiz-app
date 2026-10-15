@@ -1,0 +1,34 @@
+appId: com.lovable.jlptpractice
+productName: JLPT Practice
+artifactName: ${productName}-${version}-${os}-${arch}.${ext}
+directories:
+  output: electron-release
+  buildResources: build-resources
+files:
+  - .output/**/*
+  - electron/main.cjs
+  - electron/preload.cjs
+  - package.json
+extraMetadata:
+  main: electron/main.cjs
+# The SSR server must be spawned as a real Node process, so unpack the
+# .output folder from the asar archive so fs/paths work at runtime.
+asarUnpack:
+  - .output/**/*
+linux:
+  icon: build-resources/icon.png
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  category: Education
+  maintainer: JLPT Practice
+win:
+  icon: build-resources/icon.png
+  target:
+    - target: nsis
+      arch:
+        - x64
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true

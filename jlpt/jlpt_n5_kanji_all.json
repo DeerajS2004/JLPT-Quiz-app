@@ -1,0 +1,1548 @@
+{
+  "day": "N5-Foundation",
+  "date": "2026-03-19",
+  "title": "JLPT N5 Kanji — Complete Set (110 questions)",
+  "description": "All 110 N5 kanji from the reference chart: meanings, readings, and usage.",
+  "questions": [
+    {
+      "id": 1,
+      "type": "kanji",
+      "question": "「一」の意味は何ですか？",
+      "reading": "いち / ひと",
+      "options": [
+        "One",
+        "Two",
+        "Three",
+        "Ten"
+      ],
+      "answer": 0,
+      "explanation": "一 (ichi/hito) = One. e.g. 一つ (hitotsu) = one thing."
+    },
+    {
+      "id": 2,
+      "type": "kanji",
+      "question": "「二」の読み方はどれですか？",
+      "reading": "に / ふた",
+      "options": [
+        "さん",
+        "に",
+        "よん",
+        "ご"
+      ],
+      "answer": 1,
+      "explanation": "二 = に (ni) or ふた (futa). Two."
+    },
+    {
+      "id": 3,
+      "type": "kanji",
+      "question": "「三」の意味は何ですか？",
+      "reading": "さん / み",
+      "options": [
+        "Four",
+        "Two",
+        "Three",
+        "Five"
+      ],
+      "answer": 2,
+      "explanation": "三 (san/mi) = Three. e.g. 三時 (sanji) = 3 o'clock."
+    },
+    {
+      "id": 4,
+      "type": "kanji",
+      "question": "「四」の読み方はどれですか？",
+      "reading": "し / よん",
+      "options": [
+        "に",
+        "さん",
+        "し",
+        "ご"
+      ],
+      "answer": 2,
+      "explanation": "四 = し (shi) or よん (yon). Four."
+    },
+    {
+      "id": 5,
+      "type": "kanji",
+      "question": "「五」の意味は何ですか？",
+      "reading": "ご / いつ",
+      "options": [
+        "Six",
+        "Seven",
+        "Five",
+        "Eight"
+      ],
+      "answer": 2,
+      "explanation": "五 (go/itsu) = Five. e.g. 五月 (gogatsu) = May."
+    },
+    {
+      "id": 6,
+      "type": "kanji",
+      "question": "「六」の読み方はどれですか？",
+      "reading": "ろく / む",
+      "options": [
+        "なな",
+        "ろく",
+        "はち",
+        "きゅう"
+      ],
+      "answer": 1,
+      "explanation": "六 = ろく (roku) or む (mu). Six."
+    },
+    {
+      "id": 7,
+      "type": "kanji",
+      "question": "「七」の意味は何ですか？",
+      "reading": "しち / なな",
+      "options": [
+        "Eight",
+        "Nine",
+        "Six",
+        "Seven"
+      ],
+      "answer": 3,
+      "explanation": "七 (shichi/nana) = Seven. e.g. 七月 (shichigatsu) = July."
+    },
+    {
+      "id": 8,
+      "type": "kanji",
+      "question": "「八」の読み方はどれですか？",
+      "reading": "はち / や",
+      "options": [
+        "きゅう",
+        "じゅう",
+        "はち",
+        "ろく"
+      ],
+      "answer": 2,
+      "explanation": "八 = はち (hachi) or や (ya). Eight."
+    },
+    {
+      "id": 9,
+      "type": "kanji",
+      "question": "「九」の意味は何ですか？",
+      "reading": "く / きゅう / ここの",
+      "options": [
+        "Ten",
+        "Eight",
+        "Seven",
+        "Nine"
+      ],
+      "answer": 3,
+      "explanation": "九 (ku/kyuu) = Nine. e.g. 九時 (kuji) = 9 o'clock."
+    },
+    {
+      "id": 10,
+      "type": "kanji",
+      "question": "「十」の読み方はどれですか？",
+      "reading": "じゅう / とお",
+      "options": [
+        "ひゃく",
+        "じゅう",
+        "せん",
+        "まん"
+      ],
+      "answer": 1,
+      "explanation": "十 = じゅう (juu) or とお (too). Ten."
+    },
+    {
+      "id": 11,
+      "type": "kanji",
+      "question": "「口」の意味は何ですか？",
+      "reading": "くち / こう",
+      "options": [
+        "Eye",
+        "Ear",
+        "Mouth",
+        "Nose"
+      ],
+      "answer": 2,
+      "explanation": "口 (kuchi) = Mouth. e.g. 入口 (iriguchi) = entrance."
+    },
+    {
+      "id": 12,
+      "type": "kanji",
+      "question": "「日」の読み方はどれですか？",
+      "reading": "にち / じつ / ひ / か",
+      "options": [
+        "つき",
+        "ひ",
+        "ほし",
+        "そら"
+      ],
+      "answer": 1,
+      "explanation": "日 = ひ (hi) = sun/day. e.g. 日曜日 (nichiyoubi) = Sunday."
+    },
+    {
+      "id": 13,
+      "type": "kanji",
+      "question": "「白」の意味は何ですか？",
+      "reading": "しろ / はく",
+      "options": [
+        "Black",
+        "Red",
+        "Blue",
+        "White"
+      ],
+      "answer": 3,
+      "explanation": "白 (shiro) = White. e.g. 白い (shiroi) = white (adjective)."
+    },
+    {
+      "id": 14,
+      "type": "kanji",
+      "question": "「百」の読み方はどれですか？",
+      "reading": "ひゃく",
+      "options": [
+        "じゅう",
+        "ひゃく",
+        "せん",
+        "まん"
+      ],
+      "answer": 1,
+      "explanation": "百 = ひゃく (hyaku) = One hundred."
+    },
+    {
+      "id": 15,
+      "type": "kanji",
+      "question": "「千」の意味は何ですか？",
+      "reading": "せん / ち",
+      "options": [
+        "Ten",
+        "Hundred",
+        "Thousand",
+        "Ten thousand"
+      ],
+      "answer": 2,
+      "explanation": "千 (sen) = One thousand. e.g. 三千円 (sanzenen) = 3000 yen."
+    },
+    {
+      "id": 16,
+      "type": "kanji",
+      "question": "「万」の読み方はどれですか？",
+      "reading": "まん / ばん",
+      "options": [
+        "せん",
+        "まん",
+        "おく",
+        "ひゃく"
+      ],
+      "answer": 1,
+      "explanation": "万 = まん (man) = Ten thousand. e.g. 一万円 = 10,000 yen."
+    },
+    {
+      "id": 17,
+      "type": "kanji",
+      "question": "「人」の意味は何ですか？",
+      "reading": "ひと / じん / にん",
+      "options": [
+        "Tree",
+        "Person",
+        "Mountain",
+        "River"
+      ],
+      "answer": 1,
+      "explanation": "人 (hito) = Person/People. e.g. 日本人 (nihonjin) = Japanese person."
+    },
+    {
+      "id": 18,
+      "type": "kanji",
+      "question": "「分」の読み方はどれですか？",
+      "reading": "ふん / ぶん / わ(かる)",
+      "options": [
+        "じかん",
+        "ふん",
+        "びょう",
+        "ちょう"
+      ],
+      "answer": 1,
+      "explanation": "分 = ふん/ぷん (fun/pun) = minute. e.g. 五分 (gofun) = 5 minutes."
+    },
+    {
+      "id": 19,
+      "type": "kanji",
+      "question": "「土」の意味は何ですか？",
+      "reading": "つち / ど / と",
+      "options": [
+        "Water",
+        "Fire",
+        "Earth/Soil",
+        "Wood"
+      ],
+      "answer": 2,
+      "explanation": "土 (tsuchi/do) = Earth, soil. 土曜日 (doyoubi) = Saturday."
+    },
+    {
+      "id": 20,
+      "type": "kanji",
+      "question": "「時」の読み方はどれですか？",
+      "reading": "じ / とき",
+      "options": [
+        "ふん",
+        "びょう",
+        "じ",
+        "ねん"
+      ],
+      "answer": 2,
+      "explanation": "時 = じ (ji) = o'clock / hour. e.g. 何時 (nanji) = What time?"
+    },
+    {
+      "id": 21,
+      "type": "kanji",
+      "question": "「週」の意味は何ですか？",
+      "reading": "しゅう",
+      "options": [
+        "Month",
+        "Year",
+        "Week",
+        "Day"
+      ],
+      "answer": 2,
+      "explanation": "週 (shuu) = Week. e.g. 来週 (raishuu) = next week."
+    },
+    {
+      "id": 22,
+      "type": "kanji",
+      "question": "「月」の読み方はどれですか？",
+      "reading": "つき / げつ / がつ",
+      "options": [
+        "ひ",
+        "つき",
+        "ほし",
+        "そら"
+      ],
+      "answer": 1,
+      "explanation": "月 = つき (tsuki) = moon/month. e.g. 月曜日 (getsuyoubi) = Monday."
+    },
+    {
+      "id": 23,
+      "type": "kanji",
+      "question": "「午」の意味は何ですか？",
+      "reading": "ご",
+      "options": [
+        "Morning",
+        "Night",
+        "Noon (midday marker)",
+        "Evening"
+      ],
+      "answer": 2,
+      "explanation": "午 (go) = noon-marker. 午前 (gozen) = AM, 午後 (gogo) = PM."
+    },
+    {
+      "id": 24,
+      "type": "kanji",
+      "question": "「年」の読み方はどれですか？",
+      "reading": "ねん / とし",
+      "options": [
+        "つき",
+        "しゅう",
+        "ひ",
+        "ねん"
+      ],
+      "answer": 3,
+      "explanation": "年 = ねん (nen) or とし (toshi) = year. e.g. 来年 (rainen) = next year."
+    },
+    {
+      "id": 25,
+      "type": "kanji",
+      "question": "「今」の意味は何ですか？",
+      "reading": "いま / こん",
+      "options": [
+        "Yesterday",
+        "Tomorrow",
+        "Now/Today",
+        "Last year"
+      ],
+      "answer": 2,
+      "explanation": "今 (ima) = now. e.g. 今日 (kyou) = today, 今週 (konshuu) = this week."
+    },
+    {
+      "id": 26,
+      "type": "kanji",
+      "question": "「木」の読み方はどれですか？",
+      "reading": "き / もく / ぼく",
+      "options": [
+        "くさ",
+        "き",
+        "はな",
+        "みず"
+      ],
+      "answer": 1,
+      "explanation": "木 = き (ki) = tree/wood. 木曜日 (mokuyoubi) = Thursday."
+    },
+    {
+      "id": 27,
+      "type": "kanji",
+      "question": "「田」の意味は何ですか？",
+      "reading": "た / でん",
+      "options": [
+        "Mountain",
+        "River",
+        "Rice field",
+        "Forest"
+      ],
+      "answer": 2,
+      "explanation": "田 (ta/den) = Rice paddy field. Common in surnames: 田中 (Tanaka)."
+    },
+    {
+      "id": 28,
+      "type": "kanji",
+      "question": "「力」の読み方はどれですか？",
+      "reading": "ちから / りょく / りき",
+      "options": [
+        "かぜ",
+        "ちから",
+        "こえ",
+        "こころ"
+      ],
+      "answer": 1,
+      "explanation": "力 = ちから (chikara) = power/strength. e.g. 体力 (tairyoku) = physical strength."
+    },
+    {
+      "id": 29,
+      "type": "kanji",
+      "question": "「前」の意味は何ですか？",
+      "reading": "まえ / ぜん",
+      "options": [
+        "Behind/After",
+        "In front of/Before",
+        "Left",
+        "Right"
+      ],
+      "answer": 1,
+      "explanation": "前 (mae) = before/in front. e.g. 午前 (gozen) = AM, 名前 (namae) = name."
+    },
+    {
+      "id": 30,
+      "type": "kanji",
+      "question": "「後」の読み方はどれですか？",
+      "reading": "あと / ご / うし(ろ)",
+      "options": [
+        "まえ",
+        "あと",
+        "なか",
+        "そと"
+      ],
+      "answer": 1,
+      "explanation": "後 = あと (ato) = after/behind. e.g. 午後 (gogo) = PM, 後で (ato de) = later."
+    },
+    {
+      "id": 31,
+      "type": "kanji",
+      "question": "「先」の意味は何ですか？",
+      "reading": "さき / せん",
+      "options": [
+        "After",
+        "Behind",
+        "Ahead/Previous",
+        "Below"
+      ],
+      "answer": 2,
+      "explanation": "先 (saki/sen) = ahead, previous. e.g. 先生 (sensei) = teacher, 先週 (senshuu) = last week."
+    },
+    {
+      "id": 32,
+      "type": "kanji",
+      "question": "「来」の読み方はどれですか？",
+      "reading": "く(る) / らい / き(た)",
+      "options": [
+        "いく",
+        "くる",
+        "かえる",
+        "でる"
+      ],
+      "answer": 1,
+      "explanation": "来 = くる (kuru) = to come. 来年 (rainen) = next year, 来週 (raishuu) = next week."
+    },
+    {
+      "id": 33,
+      "type": "kanji",
+      "question": "「男」の意味は何ですか？",
+      "reading": "おとこ / だん / なん",
+      "options": [
+        "Woman",
+        "Child",
+        "Man",
+        "Person"
+      ],
+      "answer": 2,
+      "explanation": "男 (otoko) = man/male. e.g. 男の人 (otoko no hito) = male person."
+    },
+    {
+      "id": 34,
+      "type": "kanji",
+      "question": "「女」の読み方はどれですか？",
+      "reading": "おんな / じょ / にょ",
+      "options": [
+        "おとこ",
+        "こども",
+        "おんな",
+        "ひと"
+      ],
+      "answer": 2,
+      "explanation": "女 = おんな (onna) = woman/female. e.g. 女の子 (onnanoko) = girl."
+    },
+    {
+      "id": 35,
+      "type": "kanji",
+      "question": "「子」の意味は何ですか？",
+      "reading": "こ / し / す",
+      "options": [
+        "Parent",
+        "Child",
+        "Adult",
+        "Elder"
+      ],
+      "answer": 1,
+      "explanation": "子 (ko) = child. e.g. 子供 (kodomo) = child, 女の子 (onnanoko) = girl."
+    },
+    {
+      "id": 36,
+      "type": "kanji",
+      "question": "「父」の読み方はどれですか？",
+      "reading": "ちち / ふ",
+      "options": [
+        "はは",
+        "ちち",
+        "あに",
+        "いもうと"
+      ],
+      "answer": 1,
+      "explanation": "父 = ちち (chichi) = (my) father. お父さん (otousan) = father (polite)."
+    },
+    {
+      "id": 37,
+      "type": "kanji",
+      "question": "「火」の意味は何ですか？",
+      "reading": "ひ / か",
+      "options": [
+        "Water",
+        "Wind",
+        "Fire",
+        "Earth"
+      ],
+      "answer": 2,
+      "explanation": "火 (hi/ka) = fire. 火曜日 (kayoubi) = Tuesday. 火事 (kaji) = fire (disaster)."
+    },
+    {
+      "id": 38,
+      "type": "kanji",
+      "question": "「水」の読み方はどれですか？",
+      "reading": "みず / すい",
+      "options": [
+        "ひ",
+        "つち",
+        "みず",
+        "そら"
+      ],
+      "answer": 2,
+      "explanation": "水 = みず (mizu) = water. 水曜日 (suiyoubi) = Wednesday."
+    },
+    {
+      "id": 39,
+      "type": "kanji",
+      "question": "「金」の意味は何ですか？",
+      "reading": "きん / かね / かな",
+      "options": [
+        "Silver",
+        "Gold/Money",
+        "Iron",
+        "Wood"
+      ],
+      "answer": 1,
+      "explanation": "金 (kin/kane) = gold/money. 金曜日 (kinyoubi) = Friday. お金 (okane) = money."
+    },
+    {
+      "id": 40,
+      "type": "kanji",
+      "question": "「本」の読み方はどれですか？",
+      "reading": "ほん / もと / ぼん",
+      "options": [
+        "かみ",
+        "ほん",
+        "えんぴつ",
+        "つくえ"
+      ],
+      "answer": 1,
+      "explanation": "本 = ほん (hon) = book. Also means 'origin/root'. 日本 (nihon) = Japan."
+    },
+    {
+      "id": 41,
+      "type": "kanji",
+      "question": "「川」の意味は何ですか？",
+      "reading": "かわ / がわ / せん",
+      "options": [
+        "Sea",
+        "Lake",
+        "River",
+        "Mountain"
+      ],
+      "answer": 2,
+      "explanation": "川 (kawa) = river. e.g. 川口 (kawaguchi) = river mouth (also a place name)."
+    },
+    {
+      "id": 42,
+      "type": "kanji",
+      "question": "「山」の読み方はどれですか？",
+      "reading": "やま / さん",
+      "options": [
+        "かわ",
+        "うみ",
+        "やま",
+        "もり"
+      ],
+      "answer": 2,
+      "explanation": "山 = やま (yama) = mountain. 富士山 (Fujisan) = Mt. Fuji."
+    },
+    {
+      "id": 43,
+      "type": "kanji",
+      "question": "「雨」の意味は何ですか？",
+      "reading": "あめ / あま / う",
+      "options": [
+        "Snow",
+        "Wind",
+        "Cloud",
+        "Rain"
+      ],
+      "answer": 3,
+      "explanation": "雨 (ame) = rain. e.g. 雨が降る (ame ga furu) = it rains."
+    },
+    {
+      "id": 44,
+      "type": "kanji",
+      "question": "「花」の読み方はどれですか？",
+      "reading": "はな / か",
+      "options": [
+        "き",
+        "くさ",
+        "はな",
+        "みず"
+      ],
+      "answer": 2,
+      "explanation": "花 = はな (hana) = flower. e.g. 花見 (hanami) = cherry blossom viewing."
+    },
+    {
+      "id": 45,
+      "type": "kanji",
+      "question": "「耳」の意味は何ですか？",
+      "reading": "みみ / じ",
+      "options": [
+        "Eye",
+        "Nose",
+        "Mouth",
+        "Ear"
+      ],
+      "answer": 3,
+      "explanation": "耳 (mimi) = ear. e.g. 耳が痛い (mimi ga itai) = my ear hurts."
+    },
+    {
+      "id": 46,
+      "type": "kanji",
+      "question": "「手」の読み方はどれですか？",
+      "reading": "て / しゅ",
+      "options": [
+        "あし",
+        "め",
+        "て",
+        "くち"
+      ],
+      "answer": 2,
+      "explanation": "手 = て (te) = hand. e.g. 手紙 (tegami) = letter (lit. hand-paper)."
+    },
+    {
+      "id": 47,
+      "type": "kanji",
+      "question": "「足」の意味は何ですか？",
+      "reading": "あし / そく",
+      "options": [
+        "Hand",
+        "Arm",
+        "Leg/Foot",
+        "Finger"
+      ],
+      "answer": 2,
+      "explanation": "足 (ashi) = leg/foot. e.g. 足が速い (ashi ga hayai) = fast legs."
+    },
+    {
+      "id": 48,
+      "type": "kanji",
+      "question": "「目」の読み方はどれですか？",
+      "reading": "め / もく / ぼく",
+      "options": [
+        "みみ",
+        "はな",
+        "くち",
+        "め"
+      ],
+      "answer": 3,
+      "explanation": "目 = め (me) = eye. e.g. 目が大きい (me ga ookii) = big eyes."
+    },
+    {
+      "id": 49,
+      "type": "kanji",
+      "question": "「北」の意味は何ですか？",
+      "reading": "きた / ほく",
+      "options": [
+        "South",
+        "East",
+        "West",
+        "North"
+      ],
+      "answer": 3,
+      "explanation": "北 (kita) = North. e.g. 北海道 (Hokkaidou) = Hokkaido."
+    },
+    {
+      "id": 50,
+      "type": "kanji",
+      "question": "「南」の読み方はどれですか？",
+      "reading": "みなみ / なん",
+      "options": [
+        "きた",
+        "みなみ",
+        "ひがし",
+        "にし"
+      ],
+      "answer": 1,
+      "explanation": "南 = みなみ (minami) = South. e.g. 南口 (minamiguchi) = south exit."
+    },
+    {
+      "id": 51,
+      "type": "kanji",
+      "question": "「東」の意味は何ですか？",
+      "reading": "ひがし / とう",
+      "options": [
+        "West",
+        "South",
+        "North",
+        "East"
+      ],
+      "answer": 3,
+      "explanation": "東 (higashi) = East. 東京 (Toukyou) = Tokyo (Eastern Capital)."
+    },
+    {
+      "id": 52,
+      "type": "kanji",
+      "question": "「西」の読み方はどれですか？",
+      "reading": "にし / せい / さい",
+      "options": [
+        "ひがし",
+        "きた",
+        "にし",
+        "みなみ"
+      ],
+      "answer": 2,
+      "explanation": "西 = にし (nishi) = West. e.g. 関西 (Kansai) = western Japan region."
+    },
+    {
+      "id": 53,
+      "type": "kanji",
+      "question": "「上」の意味は何ですか？",
+      "reading": "うえ / じょう / かみ",
+      "options": [
+        "Below/Under",
+        "Left",
+        "Right",
+        "Above/Up"
+      ],
+      "answer": 3,
+      "explanation": "上 (ue) = above/up. e.g. 上手 (jouzu) = skillful, テーブルの上 = on the table."
+    },
+    {
+      "id": 54,
+      "type": "kanji",
+      "question": "「下」の読み方はどれですか？",
+      "reading": "した / か / げ",
+      "options": [
+        "うえ",
+        "した",
+        "なか",
+        "そと"
+      ],
+      "answer": 1,
+      "explanation": "下 = した (shita) = below/under. e.g. 下手 (heta) = unskillful."
+    },
+    {
+      "id": 55,
+      "type": "kanji",
+      "question": "「中」の意味は何ですか？",
+      "reading": "なか / ちゅう / じゅう",
+      "options": [
+        "Outside",
+        "Left",
+        "Middle/Inside",
+        "Right"
+      ],
+      "answer": 2,
+      "explanation": "中 (naka) = inside/middle. e.g. 中国 (Chuugoku) = China, 中学校 = middle school."
+    },
+    {
+      "id": 56,
+      "type": "kanji",
+      "question": "「右」の読み方はどれですか？",
+      "reading": "みぎ / う / ゆう",
+      "options": [
+        "ひだり",
+        "みぎ",
+        "うえ",
+        "した"
+      ],
+      "answer": 1,
+      "explanation": "右 = みぎ (migi) = right (direction). e.g. 右に曲がる = turn right."
+    },
+    {
+      "id": 57,
+      "type": "kanji",
+      "question": "「左」の意味は何ですか？",
+      "reading": "ひだり / さ",
+      "options": [
+        "Right",
+        "Above",
+        "Left",
+        "Below"
+      ],
+      "answer": 2,
+      "explanation": "左 (hidari) = left (direction). e.g. 左に曲がる = turn left."
+    },
+    {
+      "id": 58,
+      "type": "kanji",
+      "question": "「私」の読み方はどれですか？",
+      "reading": "わたし / わたくし / し",
+      "options": [
+        "あなた",
+        "かれ",
+        "わたし",
+        "かのじょ"
+      ],
+      "answer": 2,
+      "explanation": "私 = わたし (watashi) = I/me (polite). わたくし is more formal."
+    },
+    {
+      "id": 59,
+      "type": "kanji",
+      "question": "「半」の意味は何ですか？",
+      "reading": "はん",
+      "options": [
+        "Quarter",
+        "Half",
+        "Double",
+        "Triple"
+      ],
+      "answer": 1,
+      "explanation": "半 (han) = half. e.g. 三時半 (sanjihan) = 3:30, 半分 (hanbun) = half."
+    },
+    {
+      "id": 60,
+      "type": "kanji",
+      "question": "「母」の読み方はどれですか？",
+      "reading": "はは / も",
+      "options": [
+        "ちち",
+        "はは",
+        "あに",
+        "いもうと"
+      ],
+      "answer": 1,
+      "explanation": "母 = はは (haha) = (my) mother. お母さん (okaasan) = mother (polite)."
+    },
+    {
+      "id": 61,
+      "type": "kanji",
+      "question": "「毎」の意味は何ですか？",
+      "reading": "まい",
+      "options": [
+        "Sometimes",
+        "Never",
+        "Always",
+        "Every"
+      ],
+      "answer": 3,
+      "explanation": "毎 (mai) = every. e.g. 毎日 (mainichi) = every day, 毎朝 (maiasa) = every morning."
+    },
+    {
+      "id": 62,
+      "type": "kanji",
+      "question": "「何」の読み方はどれですか？",
+      "reading": "なに / なん",
+      "options": [
+        "どこ",
+        "だれ",
+        "なに",
+        "いつ"
+      ],
+      "answer": 2,
+      "explanation": "何 = なに/なん (nani/nan) = what. e.g. 何時 (nanji) = what time, 何人 (nannin) = how many people."
+    },
+    {
+      "id": 63,
+      "type": "kanji",
+      "question": "「友」の意味は何ですか？",
+      "reading": "とも / ゆう",
+      "options": [
+        "Enemy",
+        "Stranger",
+        "Teacher",
+        "Friend"
+      ],
+      "answer": 3,
+      "explanation": "友 (tomo) = friend. e.g. 友達 (tomodachi) = friend(s), 友人 (yuujin) = friend (formal)."
+    },
+    {
+      "id": 64,
+      "type": "kanji",
+      "question": "「気」の読み方はどれですか？",
+      "reading": "き / け",
+      "options": [
+        "こころ",
+        "き",
+        "からだ",
+        "あたま"
+      ],
+      "answer": 1,
+      "explanation": "気 = き (ki) = spirit/feeling/energy. e.g. 元気 (genki) = healthy, 気分 (kibun) = feeling."
+    },
+    {
+      "id": 65,
+      "type": "kanji",
+      "question": "「生」の意味は何ですか？",
+      "reading": "い(きる) / う(まれる) / せい / しょう / なま",
+      "options": [
+        "Death",
+        "Life/Birth",
+        "Sleep",
+        "Eat"
+      ],
+      "answer": 1,
+      "explanation": "生 = life/birth/raw. 先生 (sensei) = teacher, 生まれる (umareru) = to be born."
+    },
+    {
+      "id": 66,
+      "type": "kanji",
+      "question": "「魚」の読み方はどれですか？",
+      "reading": "さかな / うお / ぎょ",
+      "options": [
+        "にく",
+        "やさい",
+        "さかな",
+        "くだもの"
+      ],
+      "answer": 2,
+      "explanation": "魚 = さかな (sakana) = fish. e.g. 魚屋 (sakanaya) = fish shop."
+    },
+    {
+      "id": 67,
+      "type": "kanji",
+      "question": "「大」の意味は何ですか？",
+      "reading": "おお / だい / たい",
+      "options": [
+        "Small",
+        "Medium",
+        "Large/Big",
+        "Tiny"
+      ],
+      "answer": 2,
+      "explanation": "大 (oo/dai) = big/large. e.g. 大学 (daigaku) = university, 大きい (ookii) = big."
+    },
+    {
+      "id": 68,
+      "type": "kanji",
+      "question": "「天」の読み方はどれですか？",
+      "reading": "てん / あめ / あま",
+      "options": [
+        "つち",
+        "みず",
+        "そら",
+        "てん"
+      ],
+      "answer": 3,
+      "explanation": "天 = てん (ten) = heaven/sky. e.g. 天気 (tenki) = weather, 天ぷら (tempura)."
+    },
+    {
+      "id": 69,
+      "type": "kanji",
+      "question": "「空」の意味は何ですか？",
+      "reading": "そら / くう / あ(く)",
+      "options": [
+        "Sea",
+        "Ground",
+        "Sky/Empty",
+        "Mountain"
+      ],
+      "answer": 2,
+      "explanation": "空 (sora) = sky. Also means 'empty' (kara). e.g. 空港 (kuukou) = airport."
+    },
+    {
+      "id": 70,
+      "type": "kanji",
+      "question": "「電」の読み方はどれですか？",
+      "reading": "でん",
+      "options": [
+        "でん",
+        "かぜ",
+        "みず",
+        "ひ"
+      ],
+      "answer": 0,
+      "explanation": "電 = でん (den) = electricity. e.g. 電話 (denwa) = telephone, 電車 (densha) = train."
+    },
+    {
+      "id": 71,
+      "type": "kanji",
+      "question": "「車」の意味は何ですか？",
+      "reading": "くるま / しゃ",
+      "options": [
+        "Bicycle",
+        "Train/Car/Vehicle",
+        "Ship",
+        "Airplane"
+      ],
+      "answer": 1,
+      "explanation": "車 (kuruma) = car/vehicle. 電車 (densha) = electric train, 自転車 (jitensha) = bicycle."
+    },
+    {
+      "id": 72,
+      "type": "kanji",
+      "question": "「言」の読み方はどれですか？",
+      "reading": "い(う) / こと / げん / ごん",
+      "options": [
+        "きく",
+        "みる",
+        "いう",
+        "かく"
+      ],
+      "answer": 2,
+      "explanation": "言 = いう (iu) = to say. 言葉 (kotoba) = word/language. 言語 (gengo) = language."
+    },
+    {
+      "id": 73,
+      "type": "kanji",
+      "question": "「語」の意味は何ですか？",
+      "reading": "ご / かた(る)",
+      "options": [
+        "Write",
+        "Read",
+        "Language/Word",
+        "Listen"
+      ],
+      "answer": 2,
+      "explanation": "語 (go) = language/word. 日本語 (nihongo) = Japanese language. 語る (kataru) = to talk."
+    },
+    {
+      "id": 74,
+      "type": "kanji",
+      "question": "「名」の読み方はどれですか？",
+      "reading": "な / めい / みょう",
+      "options": [
+        "かお",
+        "な",
+        "からだ",
+        "ゆび"
+      ],
+      "answer": 1,
+      "explanation": "名 = な/めい (na/mei) = name. e.g. 名前 (namae) = name, 名物 (meibutsu) = local specialty."
+    },
+    {
+      "id": 75,
+      "type": "kanji",
+      "question": "「店」の意味は何ですか？",
+      "reading": "みせ / てん",
+      "options": [
+        "School",
+        "Hospital",
+        "Station",
+        "Shop/Store"
+      ],
+      "answer": 3,
+      "explanation": "店 (mise) = shop/store. e.g. 本屋 (honya) = bookshop, 店員 (ten'in) = shop staff."
+    },
+    {
+      "id": 76,
+      "type": "kanji",
+      "question": "「馬」の読み方はどれですか？",
+      "reading": "うま / ば",
+      "options": [
+        "いぬ",
+        "ねこ",
+        "うま",
+        "とり"
+      ],
+      "answer": 2,
+      "explanation": "馬 = うま (uma) = horse. e.g. 馬力 (bariki) = horsepower."
+    },
+    {
+      "id": 77,
+      "type": "kanji",
+      "question": "「駅」の意味は何ですか？",
+      "reading": "えき",
+      "options": [
+        "Airport",
+        "Bus stop",
+        "Train station",
+        "Port"
+      ],
+      "answer": 2,
+      "explanation": "駅 (eki) = (train/subway) station. e.g. 東京駅 (Tokyo Eki) = Tokyo Station."
+    },
+    {
+      "id": 78,
+      "type": "kanji",
+      "question": "「道」の読み方はどれですか？",
+      "reading": "みち / どう / とう",
+      "options": [
+        "えき",
+        "みち",
+        "かわ",
+        "やま"
+      ],
+      "answer": 1,
+      "explanation": "道 = みち (michi) = road/path/way. e.g. 北海道 (Hokkaido), 道路 (douro) = road."
+    },
+    {
+      "id": 79,
+      "type": "kanji",
+      "question": "「社」の意味は何ですか？",
+      "reading": "しゃ / やしろ",
+      "options": [
+        "Temple",
+        "Shrine/Company",
+        "School",
+        "Hospital"
+      ],
+      "answer": 1,
+      "explanation": "社 (sha) = company/shrine. 会社 (kaisha) = company. 神社 (jinja) = Shinto shrine."
+    },
+    {
+      "id": 80,
+      "type": "kanji",
+      "question": "「国」の読み方はどれですか？",
+      "reading": "くに / こく",
+      "options": [
+        "まち",
+        "くに",
+        "みせ",
+        "がっこう"
+      ],
+      "answer": 1,
+      "explanation": "国 = くに (kuni) = country/nation. e.g. 外国 (gaikoku) = foreign country."
+    },
+    {
+      "id": 81,
+      "type": "kanji",
+      "question": "「外」の意味は何ですか？",
+      "reading": "そと / がい / ほか",
+      "options": [
+        "Inside",
+        "Middle",
+        "Outside",
+        "Top"
+      ],
+      "answer": 2,
+      "explanation": "外 (soto) = outside. e.g. 外国 (gaikoku) = foreign country, 外出 (gaishutsu) = going out."
+    },
+    {
+      "id": 82,
+      "type": "kanji",
+      "question": "「学」の読み方はどれですか？",
+      "reading": "まな(ぶ) / がく",
+      "options": [
+        "おし(える)",
+        "まな(ぶ)",
+        "よ(む)",
+        "か(く)"
+      ],
+      "answer": 1,
+      "explanation": "学 = まなぶ (manabu) = to learn. 大学 (daigaku) = university, 学生 (gakusei) = student."
+    },
+    {
+      "id": 83,
+      "type": "kanji",
+      "question": "「校」の意味は何ですか？",
+      "reading": "こう",
+      "options": [
+        "Company",
+        "Hospital",
+        "School",
+        "Library"
+      ],
+      "answer": 2,
+      "explanation": "校 (kou) = school (used in compounds). 学校 (gakkou) = school, 高校 (koukou) = high school."
+    },
+    {
+      "id": 84,
+      "type": "kanji",
+      "question": "「入」の読み方はどれですか？",
+      "reading": "い(る) / はい(る) / にゅう",
+      "options": [
+        "で(る)",
+        "はい(る)",
+        "き(た)",
+        "い(く)"
+      ],
+      "answer": 1,
+      "explanation": "入 = はいる (hairu) = to enter. 入口 (iriguchi) = entrance, 入学 (nyuugaku) = school enrollment."
+    },
+    {
+      "id": 85,
+      "type": "kanji",
+      "question": "「見」の意味は何ですか？",
+      "reading": "み(る) / けん",
+      "options": [
+        "To listen",
+        "To touch",
+        "To see/look",
+        "To speak"
+      ],
+      "answer": 2,
+      "explanation": "見 (miru) = to see/look. e.g. 花見 (hanami) = flower viewing, 見学 (kengaku) = field trip."
+    },
+    {
+      "id": 86,
+      "type": "kanji",
+      "question": "「門」の読み方はどれですか？",
+      "reading": "もん / かど",
+      "options": [
+        "へや",
+        "もん",
+        "まど",
+        "ドア"
+      ],
+      "answer": 1,
+      "explanation": "門 = もん (mon) = gate. e.g. 校門 (koumon) = school gate, 専門 (senmon) = specialty."
+    },
+    {
+      "id": 87,
+      "type": "kanji",
+      "question": "「間」の意味は何ですか？",
+      "reading": "あいだ / ま / かん / けん",
+      "options": [
+        "Wall",
+        "Window",
+        "Space/Between/Time",
+        "Room"
+      ],
+      "answer": 2,
+      "explanation": "間 (aida/ma) = space/between/time. e.g. 時間 (jikan) = time, 人間 (ningen) = human."
+    },
+    {
+      "id": 88,
+      "type": "kanji",
+      "question": "「聞」の読み方はどれですか？",
+      "reading": "き(く) / ぶん / もん",
+      "options": [
+        "みる",
+        "いう",
+        "きく",
+        "かく"
+      ],
+      "answer": 2,
+      "explanation": "聞 = きく (kiku) = to listen/ask/hear. e.g. 新聞 (shinbun) = newspaper."
+    },
+    {
+      "id": 89,
+      "type": "kanji",
+      "question": "「書」の意味は何ですか？",
+      "reading": "か(く) / しょ",
+      "options": [
+        "To read",
+        "To write",
+        "To speak",
+        "To listen"
+      ],
+      "answer": 1,
+      "explanation": "書 (kaku) = to write. e.g. 教科書 (kyoukasho) = textbook, 図書館 (toshokan) = library."
+    },
+    {
+      "id": 90,
+      "type": "kanji",
+      "question": "「読」の読み方はどれですか？",
+      "reading": "よ(む) / どく / とく",
+      "options": [
+        "かく",
+        "きく",
+        "よむ",
+        "はなす"
+      ],
+      "answer": 2,
+      "explanation": "読 = よむ (yomu) = to read. e.g. 読書 (dokusho) = reading (books)."
+    },
+    {
+      "id": 91,
+      "type": "kanji",
+      "question": "「舌」の意味は何ですか？",
+      "reading": "した / ぜつ",
+      "options": [
+        "Lip",
+        "Tooth",
+        "Tongue",
+        "Throat"
+      ],
+      "answer": 2,
+      "explanation": "舌 (shita) = tongue. e.g. 舌鼓 (shitatsuzumi) = smacking one's lips in delight."
+    },
+    {
+      "id": 92,
+      "type": "kanji",
+      "question": "「話」の読み方はどれですか？",
+      "reading": "はな(す) / はなし / わ",
+      "options": [
+        "きく",
+        "よむ",
+        "はなす",
+        "かく"
+      ],
+      "answer": 2,
+      "explanation": "話 = はなす (hanasu) = to speak/talk. 話 (hanashi) = story/talk. 電話 (denwa) = telephone."
+    },
+    {
+      "id": 93,
+      "type": "kanji",
+      "question": "「買」の意味は何ですか？",
+      "reading": "か(う)",
+      "options": [
+        "To sell",
+        "To lend",
+        "To borrow",
+        "To buy"
+      ],
+      "answer": 3,
+      "explanation": "買 (kau) = to buy. e.g. 買い物 (kaimono) = shopping."
+    },
+    {
+      "id": 94,
+      "type": "kanji",
+      "question": "「行」の読み方はどれですか？",
+      "reading": "い(く) / おこな(う) / こう / ぎょう",
+      "options": [
+        "くる",
+        "かえる",
+        "いく",
+        "でる"
+      ],
+      "answer": 2,
+      "explanation": "行 = いく (iku) = to go. 旅行 (ryokou) = travel, 銀行 (ginkou) = bank."
+    },
+    {
+      "id": 95,
+      "type": "kanji",
+      "question": "「出」の意味は何ですか？",
+      "reading": "で(る) / だ(す) / しゅつ",
+      "options": [
+        "To enter",
+        "To arrive",
+        "To exit/go out",
+        "To stay"
+      ],
+      "answer": 2,
+      "explanation": "出 (deru) = to exit/come out. e.g. 出口 (deguchi) = exit, 出発 (shuppatsu) = departure."
+    },
+    {
+      "id": 96,
+      "type": "kanji",
+      "question": "「休」の読み方はどれですか？",
+      "reading": "やす(む) / きゅう",
+      "options": [
+        "はたらく",
+        "やすむ",
+        "あそぶ",
+        "ねる"
+      ],
+      "answer": 1,
+      "explanation": "休 = やすむ (yasumu) = to rest. e.g. 休日 (kyuujitsu) = holiday, 休憩 (kyuukei) = break."
+    },
+    {
+      "id": 97,
+      "type": "kanji",
+      "question": "「食」の意味は何ですか？",
+      "reading": "た(べる) / しょく",
+      "options": [
+        "To drink",
+        "To eat",
+        "To sleep",
+        "To cook"
+      ],
+      "answer": 1,
+      "explanation": "食 (taberu) = to eat. e.g. 食べ物 (tabemono) = food, 食事 (shokuji) = meal."
+    },
+    {
+      "id": 98,
+      "type": "kanji",
+      "question": "「飲」の読み方はどれですか？",
+      "reading": "の(む) / いん",
+      "options": [
+        "たべる",
+        "のむ",
+        "やく",
+        "つくる"
+      ],
+      "answer": 1,
+      "explanation": "飲 = のむ (nomu) = to drink. e.g. 飲み物 (nomimono) = drink/beverage."
+    },
+    {
+      "id": 99,
+      "type": "kanji",
+      "question": "「立」の意味は何ですか？",
+      "reading": "た(つ) / たて / りつ",
+      "options": [
+        "To sit",
+        "To lie down",
+        "To stand",
+        "To run"
+      ],
+      "answer": 2,
+      "explanation": "立 (tatsu) = to stand. e.g. 立場 (tachiba) = standpoint, 国立 (kokuritsu) = national."
+    },
+    {
+      "id": 100,
+      "type": "kanji",
+      "question": "「会」の読み方はどれですか？",
+      "reading": "あ(う) / かい",
+      "options": [
+        "わかれる",
+        "あう",
+        "いく",
+        "くる"
+      ],
+      "answer": 1,
+      "explanation": "会 = あう (au) = to meet. 会社 (kaisha) = company, 社会 (shakai) = society."
+    },
+    {
+      "id": 101,
+      "type": "kanji",
+      "question": "「多」の意味は何ですか？",
+      "reading": "おお(い) / た",
+      "options": [
+        "Few/Little",
+        "Many/Much",
+        "Medium",
+        "None"
+      ],
+      "answer": 1,
+      "explanation": "多 (ooi) = many/much/a lot. e.g. 多い人 (ooi hito) = many people."
+    },
+    {
+      "id": 102,
+      "type": "kanji",
+      "question": "「小」の読み方はどれですか？",
+      "reading": "ちい(さい) / こ / しょう",
+      "options": [
+        "おおきい",
+        "ちいさい",
+        "ながい",
+        "みじかい"
+      ],
+      "answer": 1,
+      "explanation": "小 = ちいさい (chiisai) = small. 小学校 (shougakkou) = elementary school."
+    },
+    {
+      "id": 103,
+      "type": "kanji",
+      "question": "「少」の意味は何ですか？",
+      "reading": "すく(ない) / すこ(し) / しょう",
+      "options": [
+        "Many",
+        "A lot",
+        "A little/Few",
+        "None"
+      ],
+      "answer": 2,
+      "explanation": "少 = すくない (sukunai) = few. 少し (sukoshi) = a little. 少年 (shounen) = boy/youth."
+    },
+    {
+      "id": 104,
+      "type": "kanji",
+      "question": "「古」の読み方はどれですか？",
+      "reading": "ふる(い) / こ",
+      "options": [
+        "あたらしい",
+        "ふるい",
+        "わかい",
+        "とおい"
+      ],
+      "answer": 1,
+      "explanation": "古 = ふるい (furui) = old (for things). e.g. 古本 (furuhon) = used book."
+    },
+    {
+      "id": 105,
+      "type": "kanji",
+      "question": "「辛」の意味は何ですか？",
+      "reading": "から(い) / つら(い) / しん",
+      "options": [
+        "Sweet",
+        "Salty",
+        "Spicy/Hot / Painful",
+        "Sour"
+      ],
+      "answer": 2,
+      "explanation": "辛 = からい (karai) = spicy. Also つらい (tsurai) = painful/hard. e.g. 辛い料理 = spicy food."
+    },
+    {
+      "id": 106,
+      "type": "kanji",
+      "question": "「新」の読み方はどれですか？",
+      "reading": "あたら(しい) / しん / にい",
+      "options": [
+        "ふるい",
+        "あたらしい",
+        "わかい",
+        "おおきい"
+      ],
+      "answer": 1,
+      "explanation": "新 = あたらしい (atarashii) = new. e.g. 新幹線 (shinkansen) = bullet train, 新聞 (shinbun) = newspaper."
+    },
+    {
+      "id": 107,
+      "type": "kanji",
+      "question": "「安」の意味は何ですか？",
+      "reading": "やす(い) / あん",
+      "options": [
+        "Expensive",
+        "Dangerous",
+        "Cheap/Safe",
+        "Difficult"
+      ],
+      "answer": 2,
+      "explanation": "安 = やすい (yasui) = cheap. Also あんぜん (anzen) = safe. 安心 (anshin) = peace of mind."
+    },
+    {
+      "id": 108,
+      "type": "kanji",
+      "question": "「高」の読み方はどれですか？",
+      "reading": "たか(い) / こう",
+      "options": [
+        "やすい",
+        "ひくい",
+        "たかい",
+        "ながい"
+      ],
+      "answer": 2,
+      "explanation": "高 = たかい (takai) = tall/high/expensive. e.g. 高校 (koukou) = high school. 高い山 = tall mountain."
+    },
+    {
+      "id": 109,
+      "type": "kanji",
+      "question": "「長」の意味は何ですか？",
+      "reading": "なが(い) / ちょう",
+      "options": [
+        "Short",
+        "Wide",
+        "Narrow",
+        "Long/Tall"
+      ],
+      "answer": 3,
+      "explanation": "長 (nagai) = long. Also ちょう = chief/head. e.g. 社長 (shachou) = company president."
+    },
+    {
+      "id": 110,
+      "type": "kanji",
+      "question": "「円」の読み方はどれですか？",
+      "reading": "えん / まる",
+      "options": [
+        "ドル",
+        "ポンド",
+        "えん",
+        "ユーロ"
+      ],
+      "answer": 2,
+      "explanation": "円 = えん (en) = yen (Japanese currency). Also means 'circle'. e.g. 五百円 (gohyakuen) = 500 yen."
+    }
+  ]
+}
