@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Keep quiz grading and study interactions local, with study mode in its own route, so offline practice stays focused and independently navigable.
+- Desktop Actions creates or reuses one GitHub Release before platform builds and uploads packages with the GitHub CLI; this avoids concurrent release creation and keeps downloads on Releases.

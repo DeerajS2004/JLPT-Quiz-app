@@ -5,9 +5,49 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (defaults to v followed by the package version)'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop-release-${{ github.event.inputs.tag || github.ref }}
+  cancel-in-progress: false
 
 jobs:
+  release:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create or reuse GitHub Release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_TAG: ${{ inputs.tag }}
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            TAG="${GITHUB_REF#refs/tags/}"
+          elif [[ -n "$REQUESTED_TAG" ]]; then
+            TAG="$REQUESTED_TAG"
+          else
+            TAG="v$(node -p "require('./package.json').version")"
+          fi
+          git check-ref-format "refs/tags/$TAG"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" --title "JLPT Practice $TAG" --generate-notes
+          fi
+
   build:
+    needs: release
     strategy:
       fail-fast: false
       matrix:
@@ -41,18 +81,18 @@ jobs:
       - name: Build desktop distributables
         run: bun run electron:dist
 
-      - name: Upload Linux AppImage
+      - name: Upload Linux downloads to GitHub Release
         if: matrix.name == 'linux'
-        uses: actions/upload-artifact@v4
-        with:
-          name: jlpt-practice-linux-appimage
-          path: electron-release/*.AppImage
-          if-no-files-found: error
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: gh release upload "$RELEASE_TAG" electron-release/*.AppImage electron-release/*.deb --repo "$GITHUB_REPOSITORY" --clobber
 
-      - name: Upload Windows installer
+      - name: Upload Windows installer to GitHub Release
         if: matrix.name == 'windows'
-        uses: actions/upload-artifact@v4
-        with:
-          name: jlpt-practice-windows-exe
-          path: electron-release/*.exe
-          if-no-files-found: error
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.release.outputs.tag }}
+        run: gh release upload "$RELEASE_TAG" electron-release/*.exe --repo "$GITHUB_REPOSITORY" --clobber

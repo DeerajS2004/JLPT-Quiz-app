@@ -5,3 +5,5 @@
 - [x] Update navigation, instructions, and README; verify practice and study flows.
 - [x] Add IME-safe typed input, optional hints, and strict normalized grading.
 - [x] Replace Study flashcards with a searchable, all-questions reference page.
+- [x] Align README and Instructions with scrolling Study and library/session notes.
+- [x] Configure desktop AppImage, .deb, and .exe uploads to GitHub Releases from Actions.
