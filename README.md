@@ -203,3 +203,22 @@ Use **Reset all progress** at the bottom of the Dashboard, or clear Electron's p
 ---
 
 がんばって! 🎌
+
+## Question library (manifest)
+
+Bundled sets are listed in `public/quizzes/index.json`:
+
+```json
+[{ "id": "l3-vocab", "lesson": 3, "type": "vocabulary", "url": "/quizzes/l3_vocab.json", "title": "Lesson 3 Vocabulary", "description": "Optional" }]
+```
+
+The Load screen groups entries by lesson (newest first) and shows each file's type and question count. If the manifest is missing, the N5 Kanji set is shown instead. Tick several entries to combine them into one session, then pick **10 / 20 / 50 / All** questions (a random subset).
+
+## Optional question fields
+
+- `hint` (string): shown as a badge and used as the typed-answer placeholder.
+- `strict` (boolean, default false): typed answers must match exactly after normalization — no typo tolerance.
+
+## Japanese IME note
+
+Pressing Enter while the IME (e.g. Mozc) is still composing won't submit the answer. The 1–9 keys pick options by physical key, so they work whatever your keyboard layout.
