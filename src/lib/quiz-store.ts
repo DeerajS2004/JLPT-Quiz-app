@@ -12,6 +12,17 @@ const SESSIONS_KEY = "jlpt.sessions";
 const LAST_RESULT_KEY = "jlpt.lastResult";
 const ACTIVE_KEY = "jlpt.activeSession";
 const STUDY_SET_KEY = "jlpt.studySet";
+const STUDY_SETS_KEY = "jlpt.studySets";
+const LEDGER_KEY = "jlpt.statsLedger";
+
+/** Lightweight per-test summary used to compute dashboard statistics. */
+export interface LedgerEntry {
+  id: string;
+  date: string;
+  total: number;
+  correct: number;
+  byCategory: Partial<Record<QuestionType, { total: number; correct: number }>>;
+}
 
 export const MAX_SESSION_HISTORY = 5;
 
@@ -37,16 +48,62 @@ function safeParse<T>(raw: string | null, fallback: T): T {
   }
 }
 
+function summarize(result: SessionResult): LedgerEntry {
+  const byCategory: LedgerEntry["byCategory"] = {};
+  result.questions.forEach((q, i) => {
+    const cat = byCategory[q.type] ?? { total: 0, correct: 0 };
+    cat.total += 1;
+    if (result.answers[i]?.correct) cat.correct += 1;
+    byCategory[q.type] = cat;
+  });
+  return { id: result.id, date: result.date, total: result.total, correct: result.correct, byCategory };
+}
+
+export function loadLedger(): LedgerEntry[] {
+  if (typeof window === "undefined") return [];
+  const raw = localStorage.getItem(LEDGER_KEY);
+  if (raw) return safeParse<LedgerEntry[]>(raw, []);
+  // First run after upgrade: rebuild from saved results.
+  const seeded = safeParse<SessionResult[]>(localStorage.getItem(SESSIONS_KEY), []).map(summarize);
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(seeded));
+  localStorage.removeItem(STATS_KEY);
+  return seeded;
+}
+
+function localDay(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/** Statistics are always recalculated from the saved (non-deleted) tests. */
+export function computeStats(ledger: LedgerEntry[]): Statistics {
+  const stats = emptyStats();
+  for (const e of ledger) {
+    stats.totalQuestions += e.total;
+    stats.totalCorrect += e.correct;
+    stats.sessionsCompleted += 1;
+    for (const [type, c] of Object.entries(e.byCategory)) {
+      const cat = stats.byCategory[type as QuestionType] ?? { total: 0, correct: 0 };
+      cat.total += c?.total ?? 0;
+      cat.correct += c?.correct ?? 0;
+      stats.byCategory[type as QuestionType] = cat;
+    }
+  }
+  const days = [...new Set(ledger.map((e) => localDay(e.date)))].sort().reverse();
+  stats.lastSessionDate = days[0] ?? null;
+  if (days.length) {
+    stats.streak = 1;
+    for (let i = 1; i < days.length; i++) {
+      if (dayDiff(days[i], days[i - 1]) === 1) stats.streak += 1;
+      else break;
+    }
+  }
+  return stats;
+}
+
 export function loadStats(): Statistics {
   if (typeof window === "undefined") return emptyStats();
-  const parsed = safeParse<Partial<Statistics> | null>(localStorage.getItem(STATS_KEY), null);
-  if (!parsed) return emptyStats();
-  const base = emptyStats();
-  return {
-    ...base,
-    ...parsed,
-    byCategory: { ...base.byCategory, ...(parsed.byCategory ?? {}) } as Statistics["byCategory"],
-  };
+  return computeStats(loadLedger());
 }
 
 export function loadSessions(): SessionResult[] {
@@ -64,19 +121,24 @@ export function loadLastResult(): SessionResult | null {
   return safeParse<SessionResult | null>(localStorage.getItem(LAST_RESULT_KEY), null);
 }
 
-export function saveStudySet(set: QuestionSet) {
+export function saveStudySets(sets: QuestionSet[]) {
   if (typeof window === "undefined") return;
-  localStorage.setItem(STUDY_SET_KEY, JSON.stringify(set));
+  localStorage.setItem(STUDY_SETS_KEY, JSON.stringify(sets));
+  localStorage.removeItem(STUDY_SET_KEY);
 }
 
-export function loadStudySet(): QuestionSet | null {
-  if (typeof window === "undefined") return null;
-  return safeParse<QuestionSet | null>(localStorage.getItem(STUDY_SET_KEY), null);
+export function loadStudySets(): QuestionSet[] {
+  if (typeof window === "undefined") return [];
+  const sets = safeParse<QuestionSet[] | null>(localStorage.getItem(STUDY_SETS_KEY), null);
+  if (sets) return sets;
+  const legacy = safeParse<QuestionSet | null>(localStorage.getItem(STUDY_SET_KEY), null);
+  return legacy ? [legacy] : [];
 }
 
-/** Remove a saved review without changing lifetime statistics. */
+/** Remove a saved test; statistics are recalculated without it. */
 export function removeSession(id: string): SessionResult[] {
   if (typeof window === "undefined") return [];
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(loadLedger().filter((e) => e.id !== id)));
   const sessions = loadSessions().filter((session) => session.id !== id);
   localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
   const lastResult = loadLastResult();
@@ -94,6 +156,10 @@ export interface ActiveSession {
   durationSec: number; // configured time limit
   answers: AnswerRecord[];
   currentIndex: number;
+  /** Question sets still waiting to be tested after this one. */
+  queue?: QuestionSet[];
+  /** Id of the most recently saved result in this run. */
+  lastSavedId?: string;
 }
 
 export function loadActive(): ActiveSession | null {
@@ -105,10 +171,6 @@ export function saveActive(active: ActiveSession | null) {
   if (typeof window === "undefined") return;
   if (!active) localStorage.removeItem(ACTIVE_KEY);
   else localStorage.setItem(ACTIVE_KEY, JSON.stringify(active));
-}
-
-function todayISO(): string {
-  return new Date().toISOString().slice(0, 10);
 }
 
 function dayDiff(a: string, b: string): number {
@@ -141,34 +203,10 @@ export function finalizeSession(active: ActiveSession): SessionResult {
     history.unshift(result);
     localStorage.setItem(SESSIONS_KEY, JSON.stringify(history.slice(0, MAX_SESSION_HISTORY)));
 
-    // statistics
-    const stats = loadStats();
-    stats.totalQuestions += result.total;
-    stats.totalCorrect += result.correct;
-    stats.sessionsCompleted += 1;
-    for (let i = 0; i < result.questions.length; i++) {
-      const q = result.questions[i];
-      const a = result.answers[i];
-      const cat = stats.byCategory[q.type] ?? { total: 0, correct: 0 };
-      cat.total += 1;
-      if (a?.correct) cat.correct += 1;
-      stats.byCategory[q.type] = cat;
-    }
-    const today = todayISO();
-    if (!stats.lastSessionDate) {
-      stats.streak = 1;
-    } else {
-      const diff = dayDiff(stats.lastSessionDate, today);
-      if (diff === 0) {
-        // same day — keep streak
-      } else if (diff === 1) {
-        stats.streak += 1;
-      } else {
-        stats.streak = 1;
-      }
-    }
-    stats.lastSessionDate = today;
-    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
+    // statistics ledger
+    const ledger = loadLedger();
+    ledger.push(summarize(result));
+    localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger));
 
     // clear active
     saveActive(null);
@@ -180,6 +218,7 @@ export function finalizeSession(active: ActiveSession): SessionResult {
 export function resetAllData() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(STATS_KEY);
+  localStorage.setItem(LEDGER_KEY, "[]");
   localStorage.removeItem(SESSIONS_KEY);
   localStorage.removeItem(LAST_RESULT_KEY);
   localStorage.removeItem(ACTIVE_KEY);

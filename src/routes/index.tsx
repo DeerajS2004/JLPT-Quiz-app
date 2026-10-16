@@ -158,7 +158,7 @@ function Dashboard() {
                               <AlertDialogCancel>Keep result</AlertDialogCancel>
                               <AlertDialogAction
                                 className="bg-hanko text-paper hover:bg-hanko/90"
-                                onClick={() => setSessions(removeSession(s.id))}
+                                onClick={() => { setSessions(removeSession(s.id)); setStats(loadStats()); }}
                               >
                                 Delete result
                               </AlertDialogAction>
