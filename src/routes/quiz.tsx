@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Clock, ChevronLeft, ChevronRight, Flag } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, Flag, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
   finalizeSession,
@@ -67,10 +66,29 @@ function QuizScreen() {
     return () => clearInterval(id);
   }, []);
 
+  const [pending, setPending] = useState<null | "finish" | "exit">(null);
+
+  /** End the current set; optionally save it, then continue with the next queued set unless exiting. */
   const finish = useCallback(
-    (a: ActiveSession) => {
-      const result = finalizeSession(a);
-      navigate({ to: "/results", search: { id: result.id } });
+    (a: ActiveSession, save = true, exitAll = false) => {
+      const savedId = save ? finalizeSession(a).id : a.lastSavedId;
+      if (!save) saveActive(null);
+      const queue = a.queue ?? [];
+      if (!exitAll && queue.length > 0) {
+        const [nextSet, ...rest] = queue;
+        const next: ActiveSession = {
+          set: nextSet, startedAt: Date.now(), durationSec: a.durationSec,
+          answers: [], currentIndex: 0, queue: rest, lastSavedId: savedId,
+        };
+        saveActive(next);
+        setActive(next);
+        setTypedDrafts({});
+        setNow(Date.now());
+        toast.success(save ? "Set saved — next set started" : "Set discarded — next set started", { description: nextSet.title });
+        return;
+      }
+      if (savedId) navigate({ to: "/results", search: { id: savedId } });
+      else navigate({ to: "/" });
     },
     [navigate],
   );
@@ -145,7 +163,8 @@ function QuizScreen() {
     if (!active) return;
     const last = active.currentIndex >= active.set.questions.length - 1;
     if (last) {
-      finish(active);
+      if (active.answers.filter(Boolean).length < active.set.questions.length) setPending("finish");
+      else finish(active);
       return;
     }
     const next = { ...active, currentIndex: active.currentIndex + 1 };
@@ -193,6 +212,9 @@ function QuizScreen() {
       {/* Top bar */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3 text-sm">
+          {(active.queue?.length ?? 0) > 0 && (
+            <Badge variant="secondary">{active.queue!.length} more set(s)</Badge>
+          )}
           <Badge variant="outline" className="border-ink/20 font-display">
             {active.currentIndex + 1} / {total}
           </Badge>
@@ -205,26 +227,34 @@ function QuizScreen() {
           <div className="text-muted-foreground tabular-nums">
             Answered {answered}/{total}
           </div>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button size="sm" variant="ghost" className="h-8">
-                <Flag className="mr-1.5 h-3.5 w-3.5" /> Finish
-              </Button>
-            </AlertDialogTrigger>
+          <Button size="sm" variant="ghost" className="h-8" onClick={() => setPending("finish")}>
+            <Flag className="mr-1.5 h-3.5 w-3.5" /> Finish set
+          </Button>
+          {(active.queue?.length ?? 0) > 0 && (
+            <Button size="sm" variant="ghost" className="h-8" onClick={() => setPending("exit")}>
+              <LogOut className="mr-1.5 h-3.5 w-3.5" /> Exit all
+            </Button>
+          )}
+          <AlertDialog open={pending !== null} onOpenChange={(o) => !o && setPending(null)}>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Finish session now?</AlertDialogTitle>
+                <AlertDialogTitle>{pending === "exit" ? "Exit the remaining sets?" : "Finish this set now?"}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  Unanswered questions ({total - answered}) will be marked incorrect.
+                  {total - answered > 0 ? `${total - answered} unanswered question(s) will count as incorrect if saved. ` : ""}
+                  Save this test to your results and stats, or ignore it completely?
+                  {pending === "exit" ? " Sets already completed stay saved." : (active.queue?.length ? " The next set starts afterwards." : "")}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel>Keep going</AlertDialogCancel>
+                <Button variant="outline" onClick={() => { const p = pending; setPending(null); finish(active, false, p === "exit"); }}>
+                  Ignore test
+                </Button>
                 <AlertDialogAction
                   className="bg-hanko text-paper hover:bg-hanko/90"
-                  onClick={() => finish(active)}
+                  onClick={() => { const p = pending; setPending(null); finish(active, true, p === "exit"); }}
                 >
-                  Finish
+                  Save to stats
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowUp, BookOpen, Search } from "lucide-react";
+import { ArrowUp, BookOpen, ChevronLeft, ChevronRight, Search } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { loadStudySet } from "@/lib/quiz-store";
+import { loadStudySets } from "@/lib/quiz-store";
 import type { Question, QuestionSet } from "@/lib/quiz-types";
 import { TYPE_LABELS } from "@/lib/quiz-types";
 
@@ -30,11 +30,19 @@ function answerFor(question: Question) {
 }
 
 function StudyScreen() {
-  const [set, setSet] = useState<QuestionSet | null>(null);
+  const [sets, setSets] = useState<QuestionSet[]>([]);
+  const [setIndex, setSetIndex] = useState(0);
+  const set: QuestionSet | null = sets[setIndex] ?? null;
   const [search, setSearch] = useState("");
   const [showTop, setShowTop] = useState(false);
 
-  useEffect(() => setSet(loadStudySet()), []);
+  useEffect(() => setSets(loadStudySets()), []);
+
+  function goToSet(i: number) {
+    setSetIndex(i);
+    setSearch("");
+    window.scrollTo({ top: 0 });
+  }
 
   useEffect(() => {
     const update = () => setShowTop(window.scrollY > 500);
@@ -75,7 +83,12 @@ function StudyScreen() {
   return (
     <main className="mx-auto max-w-4xl px-4 py-6 sm:px-6 sm:py-8">
       <header className="mb-6 border-b pb-5">
-        <div className="font-display text-xs uppercase tracking-[0.2em] text-hanko">Study</div>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="font-display text-xs uppercase tracking-[0.2em] text-hanko">
+            Study{sets.length > 1 ? ` · Set ${setIndex + 1} of ${sets.length}` : ""}
+          </div>
+          {sets.length > 1 && <SetNav index={setIndex} count={sets.length} onGo={goToSet} />}
+        </div>
         <h1 className="mt-2 break-words font-display text-2xl font-semibold sm:text-3xl">{set.title}</h1>
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-sm text-muted-foreground" aria-live="polite">
@@ -156,6 +169,12 @@ function StudyScreen() {
         <p className="py-12 text-center text-sm text-muted-foreground" role="status">No questions match “{search}”.</p>
       )}
 
+      {sets.length > 1 && (
+        <div className="mt-6 flex justify-center">
+          <SetNav index={setIndex} count={sets.length} onGo={goToSet} />
+        </div>
+      )}
+
       {showTop && (
         <Button
           type="button"
@@ -170,5 +189,17 @@ function StudyScreen() {
         </Button>
       )}
     </main>
+  );
+}
+function SetNav({ index, count, onGo }: { index: number; count: number; onGo: (i: number) => void }) {
+  return (
+    <div className="flex gap-2">
+      <Button size="sm" variant="outline" disabled={index === 0} onClick={() => onGo(index - 1)}>
+        <ChevronLeft className="mr-1 h-4 w-4" /> Previous set
+      </Button>
+      <Button size="sm" variant="outline" disabled={index >= count - 1} onClick={() => onGo(index + 1)}>
+        Next set <ChevronRight className="ml-1 h-4 w-4" />
+      </Button>
+    </div>
   );
 }

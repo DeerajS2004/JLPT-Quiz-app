@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, ChevronDown, Play, Upload } from "lucide-react";
+import { BookOpen, ChevronDown, Play, Upload, X } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { toast } from "sonner";
@@ -10,8 +10,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { fetchManifest, groupByLesson, mergeSets, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
-import { saveActive, saveStudySet, validateQuestionSet } from "@/lib/quiz-store";
+import { fetchManifest, groupByLesson, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
+import { saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
 
 export const Route = createFileRoute("/load")({
@@ -30,27 +30,27 @@ export const Route = createFileRoute("/load")({
 
 function LoadTest() {
   const navigate = useNavigate();
-  const [set, setSet] = useState<QuestionSet | null>(null);
+  const [uploaded, setUploaded] = useState<QuestionSet[]>([]);
   const [duration, setDuration] = useState(15);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function useSet(questionSet: QuestionSet) {
-    setSet(questionSet);
-    saveStudySet(questionSet);
-  }
-
-  async function onFile(file: File) {
-    try {
-      const parsed: unknown = JSON.parse(await file.text());
-      const validated = validateQuestionSet(parsed);
-      if (!validated.ok) {
-        toast.error("Invalid question file", { description: validated.error });
-        return;
+  async function onFiles(files: File[]) {
+    const ok: QuestionSet[] = [];
+    for (const file of files) {
+      try {
+        const validated = validateQuestionSet(JSON.parse(await file.text()) as unknown);
+        if (!validated.ok) {
+          toast.error(`Invalid question file: ${file.name}`, { description: validated.error });
+          continue;
+        }
+        ok.push(validated.set);
+      } catch (error) {
+        toast.error(`Could not read ${file.name}`, { description: error instanceof Error ? error.message : String(error) });
       }
-      useSet(validated.set);
-      toast.success("Question set loaded", { description: `${validated.set.title} · ${validated.set.questions.length} questions` });
-    } catch (error) {
-      toast.error("Could not read the JSON file", { description: error instanceof Error ? error.message : String(error) });
+    }
+    if (ok.length) {
+      setUploaded((u) => [...u, ...ok]);
+      toast.success(`${ok.length} question set${ok.length > 1 ? "s" : ""} loaded`);
     }
   }
 
@@ -79,17 +79,21 @@ function LoadTest() {
   }, []);
 
   function toggle(id: string, on: boolean) {
-    const next = on ? [...selected, id] : selected.filter((x) => x !== id);
-    setSelected(next);
-    const sources = next.flatMap((x) => (loaded[x] ? [{ id: x, set: loaded[x] }] : []));
-    if (sources.length) useSet(mergeSets(sources));
-    else setSet(null);
+    setSelected((cur) => (on ? [...cur, id] : cur.filter((x) => x !== id)));
   }
 
+  const sets: QuestionSet[] = [...selected.flatMap((x) => (loaded[x] ? [loaded[x]] : [])), ...uploaded];
+  const totalQuestions = sets.reduce((n, s) => n + s.questions.length, 0);
+
+  useEffect(() => {
+    if (sets.length) saveStudySets(sets);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, uploaded, loaded]);
+
   function start() {
-    if (!set) return;
-    const picked = pickQuestions(set, size);
-    saveActive({ set: picked, startedAt: Date.now(), durationSec: duration * 60, answers: [], currentIndex: 0 });
+    if (!sets.length) return;
+    const [first, ...rest] = sets.map((s) => pickQuestions(s, size));
+    saveActive({ set: first, startedAt: Date.now(), durationSec: duration * 60, answers: [], currentIndex: 0, queue: rest });
     void navigate({ to: "/quiz" });
   }
 
@@ -111,18 +115,19 @@ function LoadTest() {
             <input
               ref={inputRef}
               type="file"
+              multiple
               accept="application/json,.json"
               className="sr-only"
               aria-label="Choose a JSON question file"
               onChange={(event) => {
-                const file = event.target.files?.[0];
-                if (file) void onFile(file);
+                const files = Array.from(event.target.files ?? []);
+                if (files.length) void onFiles(files);
                 event.currentTarget.value = "";
               }}
             />
             <Button variant="outline" className="h-28 w-full flex-col gap-3" onClick={() => inputRef.current?.click()}>
               <Upload className="h-6 w-6" />
-              <span>Choose a .json question file</span>
+              <span>Choose one or more .json files</span>
             </Button>
           </CardContent>
         </Card>
@@ -170,27 +175,45 @@ function LoadTest() {
         </Card>
       </div>
 
-      {set && (
+      {sets.length > 0 && (
         <Card className="mt-8 border-hanko/30">
           <CardHeader>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <CardTitle className="font-display text-2xl">{set.title}</CardTitle>
-                <CardDescription>{set.description ?? "Ready for practice or study."}</CardDescription>
+                <CardTitle className="font-display text-2xl">
+                  {sets.length === 1 ? sets[0].title : `${sets.length} sets, one after another`}
+                </CardTitle>
+                <CardDescription>Tests and study run through each set in this order.</CardDescription>
               </div>
-              <Badge className="bg-hanko text-paper hover:bg-hanko">{set.questions.length} questions</Badge>
+              <Badge className="bg-hanko text-paper hover:bg-hanko">{totalQuestions} questions</Badge>
             </div>
+            <ol className="mt-3 space-y-1 text-sm">
+              {sets.map((s, i) => {
+                const upIdx = i - (sets.length - uploaded.length);
+                return (
+                  <li key={i} className="flex items-center justify-between gap-2 rounded-md bg-secondary/50 px-3 py-1.5">
+                    <span className="min-w-0 truncate">{i + 1}. {s.title} <span className="text-muted-foreground">· {s.questions.length}</span></span>
+                    {upIdx >= 0 && (
+                      <Button size="icon" variant="ghost" className="h-6 w-6" aria-label={`Remove ${s.title}`}
+                        onClick={() => setUploaded((u) => u.filter((_, j) => j !== upIdx))}>
+                        <X className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
           </CardHeader>
           <CardContent className="space-y-6">
             <div>
-              <Label htmlFor="duration" className="text-xs uppercase tracking-wider text-muted-foreground">Test time limit</Label>
+              <Label htmlFor="duration" className="text-xs uppercase tracking-wider text-muted-foreground">Time limit per set</Label>
               <div className="mt-3 flex items-center gap-4">
                 <Slider id="duration" min={1} max={60} step={1} value={[duration]} onValueChange={(value) => setDuration(value[0] ?? 15)} />
                 <div className="w-16 text-right font-display text-lg tabular-nums">{duration}m</div>
               </div>
             </div>
             <div>
-              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Number of questions</Label>
+              <Label className="text-xs uppercase tracking-wider text-muted-foreground">Questions per set</Label>
               <div className="mt-3 flex flex-wrap gap-2">
                 {[10, 20, 50, null].map((n) => (
                   <Button key={String(n)} type="button" size="sm" variant={size === n ? "default" : "outline"} onClick={() => setSize(n)}>
@@ -201,7 +224,7 @@ function LoadTest() {
             </div>
             <div className="flex flex-wrap justify-end gap-3">
               <Button variant="outline" onClick={() => void navigate({ to: "/study" })}>
-                <BookOpen className="mr-2 h-4 w-4" /> Study set
+                <BookOpen className="mr-2 h-4 w-4" /> Study sets
               </Button>
               <Button onClick={start} className="bg-hanko text-paper hover:bg-hanko/90">
                 <Play className="mr-2 h-4 w-4" /> Start test
