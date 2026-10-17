@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { fetchManifest, groupByLesson, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
-import { saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
+import { normalizeQuizJson, saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
 
 export const Route = createFileRoute("/load")({
@@ -38,12 +38,18 @@ function LoadTest() {
     const ok: QuestionSet[] = [];
     for (const file of files) {
       try {
-        const validated = validateQuestionSet(JSON.parse(await file.text()) as unknown);
+        const normalized = normalizeQuizJson(JSON.parse(await file.text()) as unknown);
+        const validated = validateQuestionSet(normalized.json);
         if (!validated.ok) {
           toast.error(`Invalid question file: ${file.name}`, { description: validated.error });
           continue;
         }
         ok.push(validated.set);
+        if (normalized.total > 0) {
+          const details = Object.entries(normalized.fixes).filter(([, count]) => count > 0)
+            .map(([kind, count]) => `${kind}: ${count}`).join(", ");
+          toast.info(`Imported with ${normalized.total} automatic fixes (${details})`, { description: file.name, duration: 8000 });
+        }
       } catch (error) {
         toast.error(`Could not read ${file.name}`, { description: error instanceof Error ? error.message : String(error) });
       }
@@ -67,7 +73,7 @@ function LoadTest() {
         fetch(e.url)
           .then((r) => (r.ok ? r.json() : Promise.reject()))
           .then((json: unknown) => {
-            const v = validateQuestionSet(json);
+            const v = validateQuestionSet(normalizeQuizJson(json).json);
             if (v.ok) {
               setLoaded((m) => ({ ...m, [e.id]: v.set }));
               setCounts((c) => ({ ...c, [e.id]: v.set.questions.length }));
