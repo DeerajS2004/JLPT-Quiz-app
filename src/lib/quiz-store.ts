@@ -224,6 +224,80 @@ export function resetAllData() {
   localStorage.removeItem(ACTIVE_KEY);
 }
 
+export interface QuizJsonFixes {
+  "question type": number;
+  "format aliases": number;
+  "answer text → index": number;
+  "numeric answer → index": number;
+  "typed answers": number;
+  "inferred typed format": number;
+}
+
+/** Repair generator aliases without mutating input or relaxing validation. Unknown keys are ignored. */
+export function normalizeQuizJson(raw: unknown): { json: unknown; fixes: QuizJsonFixes; total: number } {
+  const fixes: QuizJsonFixes = {
+    "question type": 0,
+    "format aliases": 0,
+    "answer text → index": 0,
+    "numeric answer → index": 0,
+    "typed answers": 0,
+    "inferred typed format": 0,
+  };
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return { json: raw, fixes, total: 0 };
+  const root = raw as Record<string, unknown>;
+  if (!Array.isArray(root.questions)) return { json: raw, fixes, total: 0 };
+  const questions = root.questions.map((value: unknown) => {
+    if (!value || typeof value !== "object" || Array.isArray(value)) return value;
+    const q = { ...value } as Record<string, unknown>;
+    if (q.type === undefined && QUESTION_TYPES.includes(root.type as QuestionType)) {
+      q.type = root.type;
+      fixes["question type"]++;
+    }
+    if (q.format === "multiple_choice" || q.format === "mc" || q.format === "choice") {
+      // The canonical explicit default is equivalent to omission, not a semantic repair.
+      if (q.format !== "multiple_choice") fixes["format aliases"]++;
+      delete q.format;
+    } else if (q.format === "text" || q.format === "free") {
+      q.format = "typed";
+      fixes["format aliases"]++;
+    } else if (q.format === undefined && q.options === undefined &&
+      (typeof q.answer === "string" || q.correctAnswers !== undefined)) {
+      q.format = "typed";
+      fixes["inferred typed format"]++;
+    }
+
+    if (q.format === "typed") {
+      if (q.correctAnswers === undefined) {
+        const alias = ["acceptedAnswers", "accepted", "accept", "acceptableAnswers", "expectedAnswer"]
+          .find((key) => q[key] !== undefined);
+        const candidates = [typeof q.answer === "string" ? q.answer : [], alias ? q[alias] : []];
+        const flatten = (value: unknown): string[] => Array.isArray(value)
+          ? value.flatMap(flatten) : typeof value === "string" ? [value] : [];
+        const answers = [...new Set(flatten(candidates))];
+        if (answers.length) {
+          q.correctAnswers = answers;
+          fixes["typed answers"]++;
+        }
+      }
+    } else if (typeof q.answer === "string") {
+      const answer = q.answer;
+      const options = Array.isArray(q.options) ? q.options : [];
+      let index = options.findIndex((option) => option === answer);
+      if (index < 0) index = options.findIndex((option) => typeof option === "string" &&
+        option.trim().toLowerCase() === answer.trim().toLowerCase());
+      if (index >= 0) {
+        q.answer = index;
+        fixes["answer text → index"]++;
+      } else if (/^[+-]?\d+$/.test(answer.trim())) {
+        q.answer = Number(answer);
+        fixes["numeric answer → index"]++;
+      }
+    }
+    return q;
+  });
+  return { json: { ...root, questions }, fixes, total: Object.values(fixes).reduce((sum, count) => sum + count, 0) };
+}
+
 export function validateQuestionSet(input: unknown): { ok: true; set: QuestionSet } | { ok: false; error: string } {
   if (!input || typeof input !== "object") return { ok: false, error: "Root must be an object." };
   const obj = input as Record<string, unknown>;

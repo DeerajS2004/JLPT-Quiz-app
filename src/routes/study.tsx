@@ -134,7 +134,7 @@ function StudyScreen() {
                       {question.question}
                     </div>
                     {question.reading && <div className="jp mt-1 break-words text-sm text-muted-foreground">{question.reading}</div>}
-                    {question.hint && (
+                    {isTyped && question.hint && (
                       <Badge variant="secondary" className="jp mt-2 max-w-full whitespace-normal">Hint: {question.hint}</Badge>
                     )}
 
