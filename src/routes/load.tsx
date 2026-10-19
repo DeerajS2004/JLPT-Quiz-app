@@ -215,7 +215,8 @@ function LoadTest() {
                     <Link to="/library/$fileId" params={{ fileId: f.id }}><BarChart3 className="mr-1 h-4 w-4" />Analysis</Link>
                   </Button>
                   <Button size="icon" variant="ghost" aria-label={`Delete ${f.title}`} onClick={() => {
-                    const all = window.confirm(`Delete "${f.title}"?\n\nOK = also delete its saved attempts\nCancel = keep attempts`);
+                    if (!window.confirm(`Delete the saved file "${f.title}"?`)) return;
+                    const all = window.confirm("Also delete its saved attempts and analysis? (Cancel keeps them)");
                     void deleteFile(f.id, all).then(() => {
                       setPicked((p) => p.filter((x) => x !== f.id));
                       setUploaded((u) => u.filter((x) => x.sourceId !== f.id));
