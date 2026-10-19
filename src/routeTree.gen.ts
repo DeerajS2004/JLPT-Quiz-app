@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as HistoryRouteImport } from './routes/history'
 import { Route as InstructionsRouteImport } from './routes/instructions'
 import { Route as LoadRouteImport } from './routes/load'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultsRouteImport } from './routes/results'
 import { Route as StudyRouteImport } from './routes/study'
+import { Route as LibraryFileIdRouteImport } from './routes/library.$fileId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoryRoute = HistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InstructionsRoute = InstructionsRouteImport.update({
@@ -46,54 +53,85 @@ const StudyRoute = StudyRouteImport.update({
   path: '/study',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LibraryFileIdRoute = LibraryFileIdRouteImport.update({
+  id: '/library/$fileId',
+  path: '/library/$fileId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/instructions': typeof InstructionsRoute
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
   '/study': typeof StudyRoute
+  '/library/$fileId': typeof LibraryFileIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/instructions': typeof InstructionsRoute
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
   '/study': typeof StudyRoute
+  '/library/$fileId': typeof LibraryFileIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/history': typeof HistoryRoute
   '/instructions': typeof InstructionsRoute
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
   '/study': typeof StudyRoute
+  '/library/$fileId': typeof LibraryFileIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/instructions' | '/load' | '/quiz' | '/results' | '/study'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/instructions' | '/load' | '/quiz' | '/results' | '/study'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/history'
     | '/instructions'
     | '/load'
     | '/quiz'
     | '/results'
     | '/study'
+    | '/library/$fileId'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/history'
+    | '/instructions'
+    | '/load'
+    | '/quiz'
+    | '/results'
+    | '/study'
+    | '/library/$fileId'
+  id:
+    | '__root__'
+    | '/'
+    | '/history'
+    | '/instructions'
+    | '/load'
+    | '/quiz'
+    | '/results'
+    | '/study'
+    | '/library/$fileId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  HistoryRoute: typeof HistoryRoute
   InstructionsRoute: typeof InstructionsRoute
   LoadRoute: typeof LoadRoute
   QuizRoute: typeof QuizRoute
   ResultsRoute: typeof ResultsRoute
   StudyRoute: typeof StudyRoute
+  LibraryFileIdRoute: typeof LibraryFileIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -103,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/history': {
+      id: '/history'
+      path: '/history'
+      fullPath: '/history'
+      preLoaderRoute: typeof HistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/instructions': {
@@ -140,16 +185,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/library/$fileId': {
+      id: '/library/$fileId'
+      path: '/library/$fileId'
+      fullPath: '/library/$fileId'
+      preLoaderRoute: typeof LibraryFileIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  HistoryRoute: HistoryRoute,
   InstructionsRoute: InstructionsRoute,
   LoadRoute: LoadRoute,
   QuizRoute: QuizRoute,
   ResultsRoute: ResultsRoute,
   StudyRoute: StudyRoute,
+  LibraryFileIdRoute: LibraryFileIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
