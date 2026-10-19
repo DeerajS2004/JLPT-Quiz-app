@@ -6,6 +6,7 @@ import type {
   QuestionType,
 } from "./quiz-types";
 import { QUESTION_TYPES } from "./quiz-types";
+import { addHistory, saveAttempt, toHistoryEntry } from "./library-store";
 
 const STATS_KEY = "jlpt.statistics";
 const SESSIONS_KEY = "jlpt.sessions";
@@ -207,6 +208,13 @@ export function finalizeSession(active: ActiveSession): SessionResult {
     const ledger = loadLedger();
     ledger.push(summarize(result));
     localStorage.setItem(LEDGER_KEY, JSON.stringify(ledger));
+
+    // history (marks + wrong answers only) and full attempt for saved files
+    addHistory(toHistoryEntry(result, active.set.sourceId));
+    if (active.set.sourceId) {
+      void saveAttempt({ id: result.id, fileId: active.set.sourceId, date: result.date, durationSec: result.durationSec,
+        total: result.total, correct: result.correct, questions: result.questions, answers: result.answers }).catch(() => {});
+    }
 
     // clear active
     saveActive(null);

@@ -19,6 +19,8 @@ export interface QuestionSet {
   date?: string;
   title: string;
   description?: string;
+  /** Saved-library file this set came from. */
+  sourceId?: string;
   questions: Question[];
 }
 
