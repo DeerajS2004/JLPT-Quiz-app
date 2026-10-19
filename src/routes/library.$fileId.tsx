@@ -39,7 +39,7 @@ function FileAnalysisPage() {
   }, [fileId]);
 
   const a = computeFileAnalysis(attempts);
-  const title = file?.title ?? attempts[0]?.questions && fileId;
+  const title = file?.title ?? fileId;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
