@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, BookOpen, BarChart3, FileText, GraduationCap } from "lucide-react";
+import { Home, BookOpen, BarChart3, FileText, GraduationCap, History } from "lucide-react";
 
 import {
   Sidebar,
@@ -17,8 +17,9 @@ import {
 const items = [
   { title: "Dashboard", url: "/", icon: Home },
   { title: "Load Test", url: "/load", icon: BookOpen },
-  { title: "Study", url: "/study", icon: GraduationCap },
+  { title: "Study", url: "/study", icon: GraduationCap, History },
   { title: "Last Results", url: "/results", icon: BarChart3 },
+  { title: "History", url: "/history", icon: History },
   { title: "Instructions", url: "/instructions", icon: FileText },
 ];
 

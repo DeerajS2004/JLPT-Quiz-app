@@ -13,6 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { fetchManifest, groupByLesson, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
 import { normalizeQuizJson, saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
+import { deleteFile, listFiles, saveFile, type SavedFile } from "@/lib/library-store";
+import { Link } from "@tanstack/react-router";
+import { BarChart3, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/load")({
   head: () => ({
@@ -44,7 +47,8 @@ function LoadTest() {
           toast.error(`Invalid question file: ${file.name}`, { description: validated.error });
           continue;
         }
-        ok.push(validated.set);
+        const saved = await saveFile(validated.set).catch(() => null);
+        ok.push(saved ? { ...validated.set, sourceId: saved.id } : validated.set);
         if (normalized.total > 0) {
           const details = Object.entries(normalized.fixes).filter(([, count]) => count > 0)
             .map(([kind, count]) => `${kind}: ${count}`).join(", ");
@@ -55,10 +59,17 @@ function LoadTest() {
       }
     }
     if (ok.length) {
+      void refreshFiles();
       setUploaded((u) => [...u, ...ok]);
       toast.success(`${ok.length} question set${ok.length > 1 ? "s" : ""} loaded`);
     }
   }
+
+  const [files, setFiles] = useState<SavedFile[]>([]);
+  const [picked, setPicked] = useState<string[]>([]);
+  const refreshFiles = () => listFiles().then(setFiles).catch(() => {});
+  useEffect(() => { void refreshFiles(); }, []);
+  const uploadedIds = new Set(uploaded.map((u) => u.sourceId));
 
   const [manifest, setManifest] = useState<ManifestEntry[]>([]);
   const [counts, setCounts] = useState<Record<string, number | null>>({});
@@ -88,13 +99,15 @@ function LoadTest() {
     setSelected((cur) => (on ? [...cur, id] : cur.filter((x) => x !== id)));
   }
 
-  const sets: QuestionSet[] = [...selected.flatMap((x) => (loaded[x] ? [loaded[x]] : [])), ...uploaded];
+  const savedSets: QuestionSet[] = files.filter((f) => picked.includes(f.id) && !uploadedIds.has(f.id))
+    .map((f) => ({ ...f.set, sourceId: f.id }));
+  const sets: QuestionSet[] = [...selected.flatMap((x) => (loaded[x] ? [loaded[x]] : [])), ...savedSets, ...uploaded];
   const totalQuestions = sets.reduce((n, s) => n + s.questions.length, 0);
 
   useEffect(() => {
     if (sets.length) saveStudySets(sets);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, uploaded, loaded]);
+  }, [selected, uploaded, loaded, picked, files]);
 
   function start() {
     if (!sets.length) return;
@@ -180,6 +193,43 @@ function LoadTest() {
           </CardContent>
         </Card>
       </div>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="font-display">My files</CardTitle>
+          <CardDescription>Every JSON file you upload is kept here until you delete it.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {files.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No saved files yet. Upload a JSON file above.</p>
+          ) : (
+            <ul className="divide-y">
+              {files.map((f) => (
+                <li key={f.id} className="flex items-center gap-3 py-2 text-sm">
+                  <Checkbox checked={picked.includes(f.id) || uploadedIds.has(f.id)} disabled={uploadedIds.has(f.id)}
+                    aria-label={`Use ${f.title}`}
+                    onCheckedChange={(v) => setPicked((p) => (v === true ? [...p, f.id] : p.filter((x) => x !== f.id)))} />
+                  <span className="min-w-0 flex-1 truncate font-medium">{f.title}
+                    <span className="ml-2 text-xs text-muted-foreground">{f.set.questions.length} questions</span></span>
+                  <Button asChild size="sm" variant="ghost">
+                    <Link to="/library/$fileId" params={{ fileId: f.id }}><BarChart3 className="mr-1 h-4 w-4" />Analysis</Link>
+                  </Button>
+                  <Button size="icon" variant="ghost" aria-label={`Delete ${f.title}`} onClick={() => {
+                    if (!window.confirm(`Delete the saved file "${f.title}"?`)) return;
+                    const all = window.confirm("Also delete its saved attempts and analysis? (Cancel keeps them)");
+                    void deleteFile(f.id, all).then(() => {
+                      setPicked((p) => p.filter((x) => x !== f.id));
+                      setUploaded((u) => u.filter((x) => x.sourceId !== f.id));
+                      void refreshFiles();
+                      toast.success(`Deleted ${f.title}`);
+                    });
+                  }}><Trash2 className="h-4 w-4" /></Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
 
       {sets.length > 0 && (
         <Card className="mt-8 border-hanko/30">
