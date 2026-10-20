@@ -9,3 +9,7 @@
 - [x] Configure desktop AppImage, .deb, and .exe uploads to GitHub Releases from Actions.
 - [x] Normalize generated quiz JSON before validation and report repair counts.
 - [x] Limit hint badges to typed questions and verify imports with tests and live practice.
+- [ ] Add a separate Saved Files tab with upload-to-save, without starting or selecting a test or study session.
+- [ ] Replace saved-file deletion popups with an app confirmation and optional attempt deletion.
+- [ ] Update History, Saved Files, and Analysis documentation.
+- [ ] Verify saving, restarting, practice, wrong-only history, and full file analysis.
