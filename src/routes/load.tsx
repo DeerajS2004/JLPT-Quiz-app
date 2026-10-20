@@ -13,9 +13,9 @@ import { Badge } from "@/components/ui/badge";
 import { fetchManifest, groupByLesson, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
 import { normalizeQuizJson, saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
-import { deleteFile, listFiles, saveFile, type SavedFile } from "@/lib/library-store";
+import { listFiles, type SavedFile } from "@/lib/library-store";
+import { importFixDescription, importQuizFile } from "@/lib/quiz-file-import";
 import { Link } from "@tanstack/react-router";
-import { BarChart3, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/load")({
   head: () => ({
@@ -41,18 +41,10 @@ function LoadTest() {
     const ok: QuestionSet[] = [];
     for (const file of files) {
       try {
-        const normalized = normalizeQuizJson(JSON.parse(await file.text()) as unknown);
-        const validated = validateQuestionSet(normalized.json);
-        if (!validated.ok) {
-          toast.error(`Invalid question file: ${file.name}`, { description: validated.error });
-          continue;
-        }
-        const saved = await saveFile(validated.set).catch(() => null);
-        ok.push(saved ? { ...validated.set, sourceId: saved.id } : validated.set);
-        if (normalized.total > 0) {
-          const details = Object.entries(normalized.fixes).filter(([, count]) => count > 0)
-            .map(([kind, count]) => `${kind}: ${count}`).join(", ");
-          toast.info(`Imported with ${normalized.total} automatic fixes (${details})`, { description: file.name, duration: 8000 });
+        const imported = await importQuizFile(file);
+        ok.push({ ...imported.saved.set, sourceId: imported.saved.id });
+        if (imported.total > 0) {
+          toast.info(`Imported with ${imported.total} automatic fixes (${importFixDescription(imported)})`, { description: file.name, duration: 8000 });
         }
       } catch (error) {
         toast.error(`Could not read ${file.name}`, { description: error instanceof Error ? error.message : String(error) });
@@ -196,12 +188,12 @@ function LoadTest() {
 
       <Card className="mt-6">
         <CardHeader>
-          <CardTitle className="font-display">My files</CardTitle>
-          <CardDescription>Every JSON file you upload is kept here until you delete it.</CardDescription>
+          <CardTitle className="font-display">Choose saved files</CardTitle>
+          <CardDescription><Link to="/saved-files" className="text-hanko hover:underline">Saved Files</Link> · Upload for later, manage files, or view analysis.</CardDescription>
         </CardHeader>
         <CardContent>
           {files.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No saved files yet. Upload a JSON file above.</p>
+            <p className="text-sm text-muted-foreground">No saved files yet.</p>
           ) : (
             <ul className="divide-y">
               {files.map((f) => (
@@ -209,21 +201,8 @@ function LoadTest() {
                   <Checkbox checked={picked.includes(f.id) || uploadedIds.has(f.id)} disabled={uploadedIds.has(f.id)}
                     aria-label={`Use ${f.title}`}
                     onCheckedChange={(v) => setPicked((p) => (v === true ? [...p, f.id] : p.filter((x) => x !== f.id)))} />
-                  <span className="min-w-0 flex-1 truncate font-medium">{f.title}
+                  <span className="min-w-0 flex-1 break-words font-medium">{f.title}
                     <span className="ml-2 text-xs text-muted-foreground">{f.set.questions.length} questions</span></span>
-                  <Button asChild size="sm" variant="ghost">
-                    <Link to="/library/$fileId" params={{ fileId: f.id }}><BarChart3 className="mr-1 h-4 w-4" />Analysis</Link>
-                  </Button>
-                  <Button size="icon" variant="ghost" aria-label={`Delete ${f.title}`} onClick={() => {
-                    if (!window.confirm(`Delete the saved file "${f.title}"?`)) return;
-                    const all = window.confirm("Also delete its saved attempts and analysis? (Cancel keeps them)");
-                    void deleteFile(f.id, all).then(() => {
-                      setPicked((p) => p.filter((x) => x !== f.id));
-                      setUploaded((u) => u.filter((x) => x.sourceId !== f.id));
-                      void refreshFiles();
-                      toast.success(`Deleted ${f.title}`);
-                    });
-                  }}><Trash2 className="h-4 w-4" /></Button>
                 </li>
               ))}
             </ul>

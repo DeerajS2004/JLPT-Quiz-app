@@ -12,3 +12,5 @@
 - Keep quiz grading and study interactions local, with study mode in its own route, so offline practice stays focused and independently navigable.
 - Desktop Actions creates or reuses one GitHub Release before platform builds and uploads packages with the GitHub CLI; this avoids concurrent release creation and keeps downloads on Releases.
 - Normalize uploaded and bundled quiz JSON through the shared quiz-store helper before unchanged validation; this keeps compatibility repairs and their counts consistent across import paths.
+- Use the shared quiz-file-import helper for uploaded-file validation and library saving; importing must not select or start practice, so the Saved Files page remains independent of Load Test.
+- Keep files and full attempts in the local IndexedDB library and manage deletion on Saved Files; Load Test only selects saved files, keeping offline storage separate from session state.
