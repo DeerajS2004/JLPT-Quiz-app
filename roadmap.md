@@ -1,7 +1,7 @@
 - [x] Remove Gemini and MCP integrations; keep the app offline.
 - [x] Add local typed-answer grading and update imported question validation.
 - [x] Add a dedicated study view for the selected local question set.
-- [x] Keep full details for only five results; allow deleting a result without changing lifetime stats.
+- [x] Keep full details for only five recent results; recalculate statistics to exclude deleted results.
 - [x] Update navigation, instructions, and README; verify practice and study flows.
 - [x] Add IME-safe typed input, optional hints, and strict normalized grading.
 - [x] Replace Study flashcards with a searchable, all-questions reference page.
@@ -9,3 +9,7 @@
 - [x] Configure desktop AppImage, .deb, and .exe uploads to GitHub Releases from Actions.
 - [x] Normalize generated quiz JSON before validation and report repair counts.
 - [x] Limit hint badges to typed questions and verify imports with tests and live practice.
+- [x] Add a separate Saved Files tab with upload-to-save, without starting or selecting a test or study session.
+- [x] Replace saved-file deletion popups with an app confirmation and optional attempt deletion.
+- [x] Update History, Saved Files, and Analysis documentation.
+- [x] Verify save persistence after reload, practice, wrong-only history, and full file analysis.
