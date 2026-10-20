@@ -15,6 +15,7 @@ import { Route as InstructionsRouteImport } from './routes/instructions'
 import { Route as LoadRouteImport } from './routes/load'
 import { Route as QuizRouteImport } from './routes/quiz'
 import { Route as ResultsRouteImport } from './routes/results'
+import { Route as SavedFilesRouteImport } from './routes/saved-files'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as LibraryFileIdRouteImport } from './routes/library.$fileId'
 
@@ -48,6 +49,11 @@ const ResultsRoute = ResultsRouteImport.update({
   path: '/results',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SavedFilesRoute = SavedFilesRouteImport.update({
+  id: '/saved-files',
+  path: '/saved-files',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudyRoute = StudyRouteImport.update({
   id: '/study',
   path: '/study',
@@ -66,6 +72,7 @@ export interface FileRoutesByFullPath {
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
+  '/saved-files': typeof SavedFilesRoute
   '/study': typeof StudyRoute
   '/library/$fileId': typeof LibraryFileIdRoute
 }
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
+  '/saved-files': typeof SavedFilesRoute
   '/study': typeof StudyRoute
   '/library/$fileId': typeof LibraryFileIdRoute
 }
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/load': typeof LoadRoute
   '/quiz': typeof QuizRoute
   '/results': typeof ResultsRoute
+  '/saved-files': typeof SavedFilesRoute
   '/study': typeof StudyRoute
   '/library/$fileId': typeof LibraryFileIdRoute
 }
@@ -99,6 +108,7 @@ export interface FileRouteTypes {
     | '/load'
     | '/quiz'
     | '/results'
+    | '/saved-files'
     | '/study'
     | '/library/$fileId'
   fileRoutesByTo: FileRoutesByTo
@@ -109,6 +119,7 @@ export interface FileRouteTypes {
     | '/load'
     | '/quiz'
     | '/results'
+    | '/saved-files'
     | '/study'
     | '/library/$fileId'
   id:
@@ -119,6 +130,7 @@ export interface FileRouteTypes {
     | '/load'
     | '/quiz'
     | '/results'
+    | '/saved-files'
     | '/study'
     | '/library/$fileId'
   fileRoutesById: FileRoutesById
@@ -130,6 +142,7 @@ export interface RootRouteChildren {
   LoadRoute: typeof LoadRoute
   QuizRoute: typeof QuizRoute
   ResultsRoute: typeof ResultsRoute
+  SavedFilesRoute: typeof SavedFilesRoute
   StudyRoute: typeof StudyRoute
   LibraryFileIdRoute: typeof LibraryFileIdRoute
 }
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResultsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/saved-files': {
+      id: '/saved-files'
+      path: '/saved-files'
+      fullPath: '/saved-files'
+      preLoaderRoute: typeof SavedFilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/study': {
       id: '/study'
       path: '/study'
@@ -202,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoadRoute: LoadRoute,
   QuizRoute: QuizRoute,
   ResultsRoute: ResultsRoute,
+  SavedFilesRoute: SavedFilesRoute,
   StudyRoute: StudyRoute,
   LibraryFileIdRoute: LibraryFileIdRoute,
 }

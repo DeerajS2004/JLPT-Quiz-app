@@ -132,11 +132,14 @@ function Instructions() {
         <CardContent className="space-y-3 text-sm leading-relaxed">
           <ol className="list-decimal space-y-2 pl-5">
             <li>Open <Link to="/load" className="text-hanko underline-offset-4 hover:underline">Load Test</Link> and either choose a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.json</code> file or pick a built-in set.</li>
-            <li>Set the time limit and press <strong>Start session</strong>.</li>
+            <li>Set the time limit and press <strong>Start test</strong>.</li>
             <li>Answer each question without seeing the correct answer during the test. Typed answers accept listed alternatives and small spelling differences.</li>
             <li>At the end, review every answer on the <Link to="/results" className="text-hanko underline-offset-4 hover:underline">Results</Link> screen.</li>
             <li>Choose <Link to="/study" className="text-hanko underline-offset-4 hover:underline">Study</Link> from the sidebar for a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring.</li>
-            <li>Your latest five detailed results are saved on this device. Removing one does not change lifetime statistics.</li>
+            <li>Your latest five detailed results are saved on this device. Deleting a result excludes that test from dashboard statistics.</li>
+            <li>Open <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and choose <strong>Upload to save</strong> to keep one or more JSON files without testing or studying now. Later, select them on Load Test. Files stay on this device until deleted or app/browser storage is cleared.</li>
+            <li><Link to="/history" className="text-hanko underline-offset-4 hover:underline">History</Link> lists all test names and marks and stores only wrong answers. Delete an entry or clear history to exclude those tests from dashboard statistics.</li>
+            <li>Choose <strong>Analysis</strong> beside a saved file for all its attempts, marks, right and wrong answers, score trends, and per-question accuracy. Deleting a saved file lets you also delete its attempts and analysis.</li>
           </ol>
           <div className="pt-2">
             <Button asChild>
@@ -185,7 +188,7 @@ function Instructions() {
                 <Row name="strict" type="boolean">Optional; when true, typed answers must match after normalization with no typo allowance. Defaults to false.</Row>
                 <Row name="id" type="number | string">Optional stable identifier.</Row>
                 <Row name="reading" type="string">Optional furigana / reading hint shown under the question.</Row>
-                <Row name="explanation" type="string">Shown in Study after revealing the answer and in the completed Results review.</Row>
+                <Row name="explanation" type="string">Shown alongside each answer in Study and in the completed Results review.</Row>
               </tbody>
             </table>
           </div>
@@ -233,7 +236,7 @@ function Instructions() {
    "url": "/quizzes/l3_vocab.json", "title": "Lesson 3 Vocabulary",
    "description": "Optional" }]`}</Code>
           <p>Each manifest entry has a unique <code>id</code>, a numeric <code>lesson</code>, a question <code>type</code>, a JSON file <code>url</code>, a <code>title</code>, and an optional <code>description</code>.</p>
-          <p>Tick several sets to combine them, then choose 10, 20, 50 or All questions — a random subset is drawn.</p>
+          <p>Tick several sets to run them one after another, then choose 10, 20, 50 or All questions per set — a random subset is drawn. Completed tests count even if you exit between sets. Finishing early asks whether to save the test to statistics or ignore it.</p>
           <p><code>hint</code> (optional text) shows as a badge and as the typed-answer placeholder. <code>strict: true</code> requires an exact match (no typo tolerance).</p>
           <p>Pressing Enter while the Japanese IME is composing does not submit the answer.</p>
         </CardContent>

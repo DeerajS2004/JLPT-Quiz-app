@@ -16,9 +16,12 @@ A calm, sidebar-driven JLPT (N5–N1) mock-test app with the hush and precision 
 - **Study mode** — a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring
 - **Tabbed review** — Wrong / Correct / All on the results screen, defaulting to Wrong
 - **Keyboard shortcuts** — `1–4` to pick an option, `← / →` to navigate, `Enter` to confirm
-- **Lifetime statistics** — accuracy, streaks, per-category progress bars, session history
-- **Local-only, persistent** — all progress is stored via `localStorage` in Electron's per-user data directory. History and stats stay put across app restarts and updates. No accounts, no cloud.
-- **Five saved reviews** — keep the full question-by-question details for the five newest tests; deleting a saved review never changes lifetime statistics
+- **Practice statistics** — accuracy, streaks, per-category progress bars; deleted tests are excluded when totals are recalculated
+- **Local-only, persistent** — history and stats use `localStorage`; saved JSON files and full per-file attempts use IndexedDB. Data stays on this device across restarts. No accounts, no cloud; clearing app/browser storage also clears local data.
+- **Five recent reviews** — keep full question-by-question details for the five newest tests; deleting a result excludes it from statistics
+- **History** — all test names, dates, and marks, with only wrong answers stored in each entry; delete one entry or clear history
+- **Saved Files** — a separate tab with **Upload to save** for one or more JSON files, without starting or selecting a test or study session; files remain until deleted
+- **File analysis** — every saved file's full attempts, right and wrong answers, best/latest/average marks, score trend, and per-question accuracy
 
 ---
 
@@ -104,6 +107,8 @@ The app is wired up as an **Electron** desktop shell. The Electron main process 
 
 Quiz history, stats, and streaks live in `localStorage`, which Electron scopes to the app's per-user `userData` directory — so your progress persists across launches and updates automatically.
 
+Saved JSON files and their full attempts live in IndexedDB on the same device. Open **Saved Files → Upload to save** to build your library without practicing immediately. Later, open **Load Test**, tick saved files, and choose **Start test** or **Study sets**. Multiple selected files run one after another. Re-uploading a file with the same title updates its saved copy. File deletion asks whether to also delete its attempts and analysis; history and dashboard totals are managed separately through result/history deletion.
+
 ### Prerequisites
 
 - **Node + Bun** — required for both the web and desktop builds.
@@ -182,6 +187,9 @@ No secrets needed — the workflow uses the auto-provisioned `GITHUB_TOKEN`.
 │   │   ├── __root.tsx          # app shell + sidebar
 │   │   ├── index.tsx           # Dashboard
 │   │   ├── load.tsx            # Load Test
+│   │   ├── saved-files.tsx     # upload-to-save and local library management
+│   │   ├── history.tsx         # marks and wrong answers for every test
+│   │   ├── library.$fileId.tsx # full attempts and per-file analysis
 │   │   ├── quiz.tsx            # Active quiz engine
 │   │   ├── results.tsx         # Wrong / Correct / All tabs
 │   │   ├── study.tsx           # untimed question review
@@ -212,7 +220,7 @@ Bundled sets are listed in `public/quizzes/index.json`:
 [{ "id": "l3-vocab", "lesson": 3, "type": "vocabulary", "url": "/quizzes/l3_vocab.json", "title": "Lesson 3 Vocabulary", "description": "Optional" }]
 ```
 
-The Load screen groups entries by lesson (newest first) and shows each file's type and question count. If the manifest is missing, the N5 Kanji set is shown instead. Tick several entries to combine them into one session, then pick **10 / 20 / 50 / All** questions (a random subset).
+The Load screen groups entries by lesson (newest first) and shows each file's type and question count. If the manifest is missing, the N5 Kanji set is shown instead. Tick several entries to run them one after another, then pick **10 / 20 / 50 / All** questions per set (a random subset). Completed sets count even if you exit between files; finishing early asks whether to save that test to statistics or ignore it.
 
 ## Optional question fields
 
