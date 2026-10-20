@@ -48,7 +48,7 @@ function FileAnalysisPage() {
         <h1 className="mt-2 font-display text-4xl font-semibold">{file === undefined ? "Loading…" : title}</h1>
         <p className="mt-1 text-muted-foreground">
           {file === null ? "This file was deleted; saved attempts are still shown." : `${file?.set.questions.length ?? 0} questions in file.`}{" "}
-          <Link to="/load" className="text-hanko hover:underline">Back to files</Link>
+          <Link to="/saved-files" className="text-hanko hover:underline">Back to files</Link>
         </p>
       </div>
 

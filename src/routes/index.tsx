@@ -117,7 +117,7 @@ function Dashboard() {
         <Card>
           <CardHeader>
             <CardTitle className="font-display">Saved test results</CardTitle>
-            <CardDescription>Full reviews for up to five tests. Removing one does not change lifetime statistics.</CardDescription>
+            <CardDescription>Full reviews for up to five tests. Deleted results are excluded from statistics.</CardDescription>
           </CardHeader>
           <CardContent>
             {sessions.length === 0 ? (
@@ -151,7 +151,7 @@ function Dashboard() {
                             <AlertDialogHeader>
                               <AlertDialogTitle>Delete this saved result?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                This removes the detailed review for “{s.title}”. Your lifetime totals and category statistics will stay unchanged.
+                                This removes the detailed review for “{s.title}”. Dashboard totals and category statistics will be recalculated without this test.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
