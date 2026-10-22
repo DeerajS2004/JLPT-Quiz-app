@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ChevronDown, Trash2 } from "lucide-react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronDown, Repeat, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,8 +37,16 @@ export function correctText(q: Question): string {
 }
 
 function HistoryPage() {
+  const navigate = useNavigate();
   const [items, setItems] = useState<HistoryEntry[]>([]);
   useEffect(() => setItems(loadHistory()), []);
+  const missed = useMemo(() => missedQuestionSet(items), [items]);
+
+  function startMissed() {
+    if (!missed.questions.length) return;
+    saveActive({ set: missed, startedAt: Date.now(), durationSec: 0, answers: [], currentIndex: 0 });
+    void navigate({ to: "/quiz" });
+  }
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
@@ -49,7 +57,11 @@ function HistoryPage() {
           <p className="mt-1 text-muted-foreground">Every test with its marks. Only wrong answers are kept. Deleting an entry removes it from your stats.</p>
         </div>
         {items.length > 0 && (
-          <AlertDialog>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" disabled={missed.questions.length === 0} onClick={startMissed}>
+              <Repeat className="mr-2 h-4 w-4" />Practice missed ({missed.questions.length})
+            </Button>
+            <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="ghost" size="sm" className="text-muted-foreground"><Trash2 className="mr-2 h-4 w-4" />Clear history</Button>
             </AlertDialogTrigger>
