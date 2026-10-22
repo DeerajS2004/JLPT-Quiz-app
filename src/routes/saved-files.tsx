@@ -1,12 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { BarChart3, BookOpen, FileJson, Trash2, Upload } from "lucide-react";
+import { ArchiveRestore, BarChart3, BookOpen, Download, FileJson, Trash2, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { deleteFile, listFiles, type SavedFile } from "@/lib/library-store";
 import { importFixDescription, importQuizFile } from "@/lib/quiz-file-import";
+import { exportBackup, restoreBackup } from "@/lib/backup";
 
 export const Route = createFileRoute("/saved-files")({
   head: () => ({ meta: [
@@ -27,6 +28,34 @@ function SavedFiles() {
   const [deleting, setDeleting] = useState<SavedFile | null>(null);
   const [withAttempts, setWithAttempts] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+  const zipInput = useRef<HTMLInputElement>(null);
+
+  async function exportAll() {
+    setBusy(true);
+    try {
+      const { name, blob, summary } = await exportBackup();
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = name;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      toast.success(`Backup downloaded: ${summary.files} files, ${summary.attempts} attempts, ${summary.history} history entries`);
+    } catch { toast.error("Could not create the backup"); }
+    finally { setBusy(false); }
+  }
+
+  async function restore(archive: File) {
+    setBusy(true);
+    try {
+      const summary = await restoreBackup(archive);
+      setFiles(await listFiles());
+      toast.success(`Restored ${summary.files} files, ${summary.attempts} attempts, ${summary.history} history entries (existing entries were kept)`);
+    } catch (error) {
+      toast.error("Could not restore the backup", { description: error instanceof Error ? error.message : String(error) });
+    }
+    finally { setBusy(false); }
+  }
 
   useEffect(() => {
     void listFiles().then(setFiles).catch(() => toast.error("Could not load saved files"))
