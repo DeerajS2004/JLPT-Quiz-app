@@ -117,6 +117,16 @@ export function loadSessions(): SessionResult[] {
   return recent;
 }
 
+/** Merge a backup's ledger; a restored entry replaces a local one with the same id. */
+export function mergeLedger(entries: LedgerEntry[]): LedgerEntry[] {
+  if (typeof window === "undefined") return [];
+  const byId = new Map(loadLedger().map((e) => [e.id, e] as const));
+  for (const e of entries) if (e && e.id) byId.set(e.id, e);
+  const next = [...byId.values()];
+  localStorage.setItem(LEDGER_KEY, JSON.stringify(next));
+  return next;
+}
+
 export function loadLastResult(): SessionResult | null {
   if (typeof window === "undefined") return null;
   return safeParse<SessionResult | null>(localStorage.getItem(LAST_RESULT_KEY), null);

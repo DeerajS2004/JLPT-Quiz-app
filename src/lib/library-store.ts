@@ -109,6 +109,38 @@ export const listAttempts = (fileId: string) =>
     .then((a) => a.sort((x, y) => y.date.localeCompare(x.date)));
 export const deleteAttempt = (id: string) => tx("attempts", "readwrite", (s) => { s.delete(id); });
 
+/* ---------------- Backups (zip export / merge restore) ---------------- */
+
+export const putFile = (file: SavedFile) => tx("files", "readwrite", (s) => { s.put(file); });
+export const putAttempt = (a: Attempt) => tx("attempts", "readwrite", (s) => { s.put(a); });
+export const listAllAttempts = () => tx<Attempt[]>("attempts", "readonly", (s) => s.getAll());
+
+/** Merge backup history into the local history; existing entries win, new ones are added. */
+export function mergeHistory(entries: HistoryEntry[]): HistoryEntry[] {
+  if (typeof window === "undefined") return [];
+  const byId = new Map(loadHistory().map((h) => [h.id, h] as const));
+  for (const e of entries) if (e && e.id && !byId.has(e.id)) byId.set(e.id, e);
+  const next = [...byId.values()].sort((a, b) => b.date.localeCompare(a.date));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+  return next;
+}
+
+/** A retest set with one entry per wrong answer, most-missed questions first. */
+export function missedQuestionSet(entries: HistoryEntry[]): QuestionSet {
+  const byText = new Map<string, { question: Question; count: number; order: number }>();
+  for (const entry of entries) {
+    for (const w of entry.wrong) {
+      const existing = byText.get(w.question.question);
+      if (existing) existing.count += 1;
+      else byText.set(w.question.question, { question: w.question, count: 1, order: byText.size });
+    }
+  }
+  const questions = [...byText.values()]
+    .sort((a, b) => b.count - a.count || a.order - b.order)
+    .map((v) => v.question);
+  return { title: "Missed questions retest", questions };
+}
+
 /* ---------------- Analysis ---------------- */
 
 export interface QuestionAnalysis { key: string; question: Question; seen: number; right: number; wrong: number; accuracy: number }
