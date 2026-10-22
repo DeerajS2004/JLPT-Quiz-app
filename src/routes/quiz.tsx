@@ -222,7 +222,7 @@ function QuizScreen() {
         </div>
         <div className="flex items-center gap-4 text-sm">
           <div className={`flex items-center gap-1.5 tabular-nums ${lowTime ? "text-hanko" : "text-muted-foreground"}`}>
-            <Clock className="h-4 w-4" /> {fmtTime(timeLeft)}
+            <Clock className="h-4 w-4" /> {active.durationSec > 0 ? fmtTime(timeLeft) : "—"}
           </div>
           <div className="text-muted-foreground tabular-nums">
             Answered {answered}/{total}
