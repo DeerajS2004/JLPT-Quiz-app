@@ -10,7 +10,8 @@ import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { loadHistory, removeHistory, type HistoryEntry } from "@/lib/library-store";
+import { loadHistory, missedQuestionSet, removeHistory, type HistoryEntry } from "@/lib/library-store";
+import { saveActive } from "@/lib/quiz-store";
 import type { AnswerRecord, Question } from "@/lib/quiz-types";
 
 export const Route = createFileRoute("/history")({
