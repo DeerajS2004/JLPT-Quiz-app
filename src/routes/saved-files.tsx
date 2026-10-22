@@ -101,6 +101,8 @@ function SavedFiles() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Button asChild variant="outline"><Link to="/load"><BookOpen className="mr-2 h-4 w-4" />Load Test</Link></Button>
+          <Button asChild variant="outline" disabled={busy}><span><Download className="mr-2 h-4 w-4" />Export backup</span></Button>
+          <Button asChild variant="outline" disabled={busy} aria-disabled="true"><span><ArchiveRestore className="mr-2 h-4 w-4" />Restore backup</span></Button>
           <Button disabled={busy} onClick={() => input.current?.click()}><Upload className="mr-2 h-4 w-4" />{busy ? "Saving…" : "Upload to save"}</Button>
         </div>
         <input ref={input} type="file" multiple accept="application/json,.json" className="sr-only" aria-label="Upload JSON files to save" disabled={busy}
