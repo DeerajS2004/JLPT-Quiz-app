@@ -76,7 +76,8 @@ function HistoryPage() {
                 <AlertDialogAction className="bg-hanko text-paper hover:bg-hanko/90" onClick={() => setItems(removeHistory("all"))}>Clear</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
-          </AlertDialog>
+            </AlertDialog>
+          </div>
         )}
       </div>
 
