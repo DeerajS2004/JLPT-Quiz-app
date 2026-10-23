@@ -22,6 +22,8 @@ A calm, sidebar-driven JLPT (N5–N1) mock-test app with the hush and precision 
 - **History** — all test names, dates, and marks, with only wrong answers stored in each entry; delete one entry or clear history
 - **Saved Files** — a separate tab with **Upload to save** for one or more JSON files, without starting or selecting a test or study session; files remain until deleted
 - **File analysis** — every saved file's full attempts, right and wrong answers, best/latest/average marks, score trend, and per-question accuracy
+- **Practice missed questions** — one button on the History tab builds an untimed retest from the questions you got wrong across tests, most-missed first
+- **Backup & restore** — export your whole library (saved files, attempts, history, statistics) as a zip from Saved Files and restore it on this or another device
 
 ---
 
@@ -107,7 +109,7 @@ The app is wired up as an **Electron** desktop shell. The Electron main process 
 
 Quiz history, stats, and streaks live in `localStorage`, which Electron scopes to the app's per-user `userData` directory — so your progress persists across launches and updates automatically.
 
-Saved JSON files and their full attempts live in IndexedDB on the same device. Open **Saved Files → Upload to save** to build your library without practicing immediately. Later, open **Load Test**, tick saved files, and choose **Start test** or **Study sets**. Multiple selected files run one after another. Re-uploading a file with the same title updates its saved copy. File deletion asks whether to also delete its attempts and analysis; history and dashboard totals are managed separately through result/history deletion.
+Saved JSON files and their full attempts live in IndexedDB on the same device. Open **Saved Files → Upload to save** to build your library without practicing immediately. Later, open **Load Test**, tick saved files, and choose **Start test** or **Study sets**. Multiple selected files run one after another. Re-uploading a file with the same title updates its saved copy. File deletion asks whether to also delete its attempts and analysis; history and dashboard totals are managed separately through result/history deletion. **Export backup** zips everything (saved files, attempts, history, statistics) for safekeeping or another device; **Restore backup** merges the zip back in by id, keeping existing entries.
 
 ### Prerequisites
 

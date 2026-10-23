@@ -139,6 +139,8 @@ function Instructions() {
             <li>Your latest five detailed results are saved on this device. Deleting a result excludes that test from dashboard statistics.</li>
             <li>Open <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and choose <strong>Upload to save</strong> to keep one or more JSON files without testing or studying now. Later, select them on Load Test. Files stay on this device until deleted or app/browser storage is cleared.</li>
             <li><Link to="/history" className="text-hanko underline-offset-4 hover:underline">History</Link> lists all test names and marks and stores only wrong answers. Delete an entry or clear history to exclude those tests from dashboard statistics.</li>
+            <li>Press <strong>Practice missed</strong> on the History tab for an untimed retest built only from questions you got wrong across tests, most-missed first. Its result counts for statistics like any test.</li>
+            <li>Use <strong>Export backup</strong> on Saved Files to download a zip of all saved files, attempts, history, and statistics; <strong>Restore backup</strong> merges it back in — on this device or another — without removing what is already there.</li>
             <li>Choose <strong>Analysis</strong> beside a saved file for all its attempts, marks, right and wrong answers, score trends, and per-question accuracy. Deleting a saved file lets you also delete its attempts and analysis.</li>
           </ol>
           <div className="pt-2">

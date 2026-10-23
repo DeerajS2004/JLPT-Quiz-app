@@ -13,3 +13,5 @@
 - [x] Replace saved-file deletion popups with an app confirmation and optional attempt deletion.
 - [x] Update History, Saved Files, and Analysis documentation.
 - [x] Verify save persistence after reload, practice, wrong-only history, and full file analysis.
+- [x] Add a "Practice missed questions" untimed retest from History.
+- [x] Add zip backup export and merge-on-restore on Saved Files; document both and run the tests.
