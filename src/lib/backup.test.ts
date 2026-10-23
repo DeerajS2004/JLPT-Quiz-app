@@ -19,6 +19,8 @@ if (typeof globalThis.localStorage === "undefined") {
     key: () => null,
     get length() { return store.size; },
   } as Storage;
+  // The store functions guard on `window`, so point it at the same global.
+  (globalThis as { window?: unknown }).window = globalThis;
 }
 
 const q = (id: number, text: string): Question => ({ id, type: "kanji", question: text, options: ["a", "b"], answer: 0 });
