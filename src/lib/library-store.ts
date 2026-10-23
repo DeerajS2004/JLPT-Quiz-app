@@ -53,7 +53,7 @@ export function removeHistory(ids: string[] | "all"): HistoryEntry[] {
 
 /* ---------------- Saved files + full attempts (IndexedDB, kept until deleted) ---------------- */
 
-export interface SavedFile { id: string; title: string; savedAt: string; set: QuestionSet }
+export interface SavedFile { id: string; title: string; savedAt: string; set: QuestionSet; folder?: string }
 export interface Attempt {
   id: string; fileId: string; date: string; durationSec: number;
   total: number; correct: number; questions: Question[]; answers: AnswerRecord[];
@@ -90,9 +90,31 @@ export function fileIdFor(set: QuestionSet): string {
 }
 
 export async function saveFile(set: QuestionSet): Promise<SavedFile> {
-  const file: SavedFile = { id: fileIdFor(set), title: set.title, savedAt: new Date().toISOString(), set };
+  const id = fileIdFor(set);
+  const prev = await getFile(id).catch(() => undefined);
+  const file: SavedFile = { id, title: set.title, savedAt: new Date().toISOString(), set, ...(prev?.folder ? { folder: prev.folder } : {}) };
   await tx("files", "readwrite", (s) => { s.put(file); });
   return file;
+}
+
+/** Move a file into a folder; empty name = no folder. */
+export async function setFileFolder(id: string, folder: string) {
+  const f = await getFile(id);
+  if (!f) return;
+  const name = folder.trim();
+  const next: SavedFile = { ...f };
+  if (name) next.folder = name; else delete next.folder;
+  await tx("files", "readwrite", (s) => { s.put(next); });
+}
+
+export type FileSort = "newest" | "oldest" | "az" | "za";
+export function sortFiles(files: SavedFile[], sort: FileSort): SavedFile[] {
+  const out = [...files];
+  if (sort === "newest") out.sort((a, b) => b.savedAt.localeCompare(a.savedAt));
+  if (sort === "oldest") out.sort((a, b) => a.savedAt.localeCompare(b.savedAt));
+  if (sort === "az") out.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: "base" }));
+  if (sort === "za") out.sort((a, b) => b.title.localeCompare(a.title, undefined, { sensitivity: "base" }));
+  return out;
 }
 export const listFiles = () => tx<SavedFile[]>("files", "readonly", (s) => s.getAll())
   .then((f) => f.sort((a, b) => b.savedAt.localeCompare(a.savedAt)));
