@@ -165,7 +165,19 @@ export function missedQuestionSet(entries: HistoryEntry[]): QuestionSet {
 
 /* ---------------- Analysis ---------------- */
 
-export interface QuestionAnalysis { key: string; question: Question; seen: number; right: number; wrong: number; accuracy: number }
+export type Mastery = "mastered" | "learning" | "struggling";
+export interface QuestionAnalysis { key: string; question: Question; seen: number; right: number; wrong: number; accuracy: number; streak: number; mastery: Mastery }
+
+/** Mastered: right 3+ times in a row (latest). Struggling: missed latest or under 50%. Otherwise learning. */
+export function masteryFor(outcomesNewestFirst: boolean[]): { streak: number; mastery: Mastery } {
+  let streak = 0;
+  while (streak < outcomesNewestFirst.length && outcomesNewestFirst[streak]) streak++;
+  const right = outcomesNewestFirst.filter(Boolean).length;
+  const acc = outcomesNewestFirst.length ? right / outcomesNewestFirst.length : 0;
+  if (streak >= 3) return { streak, mastery: "mastered" };
+  if (!outcomesNewestFirst[0] || acc < 0.5) return { streak, mastery: "struggling" };
+  return { streak, mastery: "learning" };
+}
 export interface FileAnalysis {
   attempts: number; best: number; latest: number; average: number;
   questions: QuestionAnalysis[];
@@ -177,16 +189,20 @@ const qKey = (q: Question) => q.question;
 
 export function computeFileAnalysis(attempts: Attempt[]): FileAnalysis {
   const map = new Map<string, QuestionAnalysis>();
-  for (const a of attempts) {
+  const outcomes = new Map<string, boolean[]>();
+  const ordered = [...attempts].sort((x, y) => y.date.localeCompare(x.date));
+  for (const a of ordered) {
     a.questions.forEach((q, i) => {
       const k = qKey(q);
-      const row = map.get(k) ?? { key: k, question: q, seen: 0, right: 0, wrong: 0, accuracy: 0 };
+      const row = map.get(k) ?? { key: k, question: q, seen: 0, right: 0, wrong: 0, accuracy: 0, streak: 0, mastery: "struggling" as Mastery };
       row.seen++;
-      if (a.answers[i]?.correct) row.right++; else row.wrong++;
+      const ok = !!a.answers[i]?.correct;
+      if (ok) row.right++; else row.wrong++;
+      outcomes.set(k, [...(outcomes.get(k) ?? []), ok]);
       map.set(k, row);
     });
   }
-  const questions = [...map.values()].map((r) => ({ ...r, accuracy: pct(r.right, r.seen) }))
+  const questions = [...map.values()].map((r) => ({ ...r, accuracy: pct(r.right, r.seen), ...masteryFor(outcomes.get(r.key) ?? []) }))
     .sort((a, b) => a.accuracy - b.accuracy || b.wrong - a.wrong);
   const scores = attempts.map((a) => pct(a.correct, a.total)); // newest first
   return {
