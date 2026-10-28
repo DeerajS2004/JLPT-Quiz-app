@@ -21,12 +21,17 @@ export interface BackupSummary {
 
 const safeName = (id: string) => id.replace(/[/\\:*?"<>|]/g, "_");
 
-/** Zip the whole local library: saved files, full attempts, history, and the stats ledger. */
-export async function exportBackup(): Promise<{ name: string; blob: Blob; summary: BackupSummary }> {
-  const files = await listFiles();
-  const attempts = await listAllAttempts();
-  const history = loadHistory();
-  const ledger = loadLedger();
+/**
+ * Zip the local library: saved files, full attempts, history, and the stats ledger.
+ * With `ids`, export only those saved files and their attempts (no history or ledger).
+ */
+export async function exportBackup(ids?: string[]): Promise<{ name: string; blob: Blob; summary: BackupSummary }> {
+  const allFiles = await listFiles();
+  const files = ids ? allFiles.filter((f) => ids.includes(f.id)) : allFiles;
+  const allAttempts = await listAllAttempts();
+  const attempts = ids ? allAttempts.filter((a) => ids.includes(a.fileId)) : allAttempts;
+  const history = ids ? [] : loadHistory();
+  const ledger = ids ? [] : loadLedger();
   const summary: BackupSummary = {
     files: files.length, attempts: attempts.length, history: history.length, ledger: ledger.length,
   };
@@ -34,6 +39,7 @@ export async function exportBackup(): Promise<{ name: string; blob: Blob; summar
   const zip = new JSZip();
   zip.file("manifest.json", JSON.stringify({
     app: "jlpt-practice", version: 1, exportedAt: new Date().toISOString(), counts: summary,
+    scope: ids ? "files" : "all",
   }));
   for (const file of files) zip.file(`files/${safeName(file.id)}.json`, JSON.stringify(file));
   for (const attempt of attempts) zip.file(`attempts/${safeName(attempt.fileId)}/${safeName(attempt.id)}.json`, JSON.stringify(attempt));
@@ -42,7 +48,7 @@ export async function exportBackup(): Promise<{ name: string; blob: Blob; summar
 
   const blob = await zip.generateAsync({ type: "blob" });
   const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
-  return { name: `jlpt-backup-${stamp}.zip`, blob, summary };
+  return { name: `${ids ? "jlpt-files" : "jlpt"}-backup-${stamp}.zip`, blob, summary };
 }
 
 function parseZipEntry<T>(raw: string, keep: (value: unknown) => T | null, kind: string): T {

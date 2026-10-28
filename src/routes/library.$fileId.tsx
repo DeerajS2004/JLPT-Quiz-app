@@ -8,7 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
-  computeFileAnalysis, deleteAttempt, getFile, listAttempts, type Attempt, type SavedFile,
+  computeFileAnalysis, deleteAttempt, getFile, listAttempts,
+  type Attempt, type Mastery, type SavedFile,
 } from "@/lib/library-store";
 import { answerText, correctText } from "./history";
 
@@ -28,6 +29,12 @@ export const Route = createFileRoute("/library/$fileId")({
 
 const pct = (c: number, t: number) => (t ? Math.round((c / t) * 100) : 0);
 
+const MASTERY: Record<Mastery, { label: string; text: string; badge: string }> = {
+  mastered: { label: "Mastered", text: "text-mastery-mastered", badge: "border-mastery-mastered/40 bg-mastery-mastered/10 text-mastery-mastered" },
+  learning: { label: "Learning", text: "text-mastery-learning", badge: "border-mastery-learning/40 bg-mastery-learning/10 text-mastery-learning" },
+  struggling: { label: "Struggling", text: "text-mastery-struggling", badge: "border-mastery-struggling/40 bg-mastery-struggling/10 text-mastery-struggling" },
+};
+
 function FileAnalysisPage() {
   const { fileId } = Route.useParams();
   const [file, setFile] = useState<SavedFile | null | undefined>(undefined);
@@ -40,6 +47,8 @@ function FileAnalysisPage() {
 
   const a = computeFileAnalysis(attempts);
   const title = file?.title ?? fileId;
+  const masteryCounts: Record<Mastery, number> = { mastered: 0, learning: 0, struggling: 0 };
+  for (const question of a.questions) masteryCounts[question.mastery] += 1;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-10">
@@ -60,6 +69,18 @@ function FileAnalysisPage() {
           </CardContent></Card>
         ))}
       </div>
+
+      {a.questions.length > 0 && (
+        <div className="mt-4 grid gap-4 md:grid-cols-3">
+          {(["mastered", "learning", "struggling"] as Mastery[]).map((stage) => (
+            <Card key={stage}><CardContent className="p-5">
+              <div className={`text-xs uppercase tracking-wider ${MASTERY[stage].text}`}>{MASTERY[stage].label}</div>
+              <div className="mt-2 font-display text-3xl font-semibold tabular-nums">{masteryCounts[stage]}</div>
+              <div className="text-xs text-muted-foreground">questions</div>
+            </CardContent></Card>
+          ))}
+        </div>
+      )}
 
       {attempts.length > 1 && (
         <Card className="mt-6">
@@ -82,7 +103,10 @@ function FileAnalysisPage() {
                 <li key={q.key} className="text-sm">
                   <div className="mb-1 flex justify-between gap-3">
                     <span className="min-w-0 truncate font-medium">{q.question.question}</span>
-                    <span className="shrink-0 tabular-nums text-muted-foreground">{q.accuracy}% · ✓{q.right} ✗{q.wrong} / {q.seen}</span>
+                    <span className="flex shrink-0 items-center gap-2">
+                      <Badge variant="outline" className={MASTERY[q.mastery].badge}>{MASTERY[q.mastery].label}</Badge>
+                      <span className="tabular-nums text-muted-foreground">{q.accuracy}% · ✓{q.right} ✗{q.wrong} / {q.seen}</span>
+                    </span>
                   </div>
                   <Progress value={q.accuracy} className="h-1.5" />
                 </li>

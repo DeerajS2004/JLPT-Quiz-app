@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { groupByLesson, mergeSets, pickQuestions } from "./built-in-quizzes";
+import { groupByLesson, groupBySection, mergeSets, pickQuestions } from "./built-in-quizzes";
 import type { QuestionSet } from "./quiz-types";
 
 const mk = (n: number): QuestionSet => ({

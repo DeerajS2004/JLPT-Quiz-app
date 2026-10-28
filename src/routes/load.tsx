@@ -10,7 +10,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
-import { fetchManifest, groupByLesson, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
+import { fetchManifest, groupBySection, pickQuestions, type ManifestEntry } from "@/lib/built-in-quizzes";
 import { normalizeQuizJson, saveActive, saveStudySets, validateQuestionSet } from "@/lib/quiz-store";
 import type { QuestionSet } from "@/lib/quiz-types";
 import { listFiles, type SavedFile } from "@/lib/library-store";
@@ -149,10 +149,10 @@ function LoadTest() {
             <CardDescription>Included with the app and available offline.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-2">
-            {groupByLesson(manifest).map(([lesson, entries], gi) => (
-              <Collapsible key={lesson} defaultOpen={gi === 0} className="rounded-md border">
+            {groupBySection(manifest).map(([section, entries], gi) => (
+              <Collapsible key={section} defaultOpen={gi === 0} className="rounded-md border">
                 <CollapsibleTrigger className="group flex w-full items-center justify-between px-3 py-2 font-display text-sm font-semibold">
-                  Lesson {lesson}
+                  {section}
                   <ChevronDown className="h-4 w-4 transition-transform group-data-[state=open]:rotate-180" />
                 </CollapsibleTrigger>
                 <CollapsibleContent className="space-y-1 px-3 pb-3">

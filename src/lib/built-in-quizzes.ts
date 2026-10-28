@@ -7,6 +7,8 @@ export interface ManifestEntry {
   url: string;
   title: string;
   description?: string;
+  /** Optional JLPT level shown as the group heading on the Load screen (e.g. "N5"). */
+  level?: string;
 }
 
 export const FALLBACK_MANIFEST: ManifestEntry[] = [
@@ -40,6 +42,31 @@ export function groupByLesson(entries: ManifestEntry[]): [number, ManifestEntry[
   const map = new Map<number, ManifestEntry[]>();
   for (const e of entries) map.set(e.lesson, [...(map.get(e.lesson) ?? []), e]);
   return [...map.entries()].sort((a, b) => b[0] - a[0]);
+}
+
+const levelRank = (label: string): number | null => {
+  const m = /^N(\d+)$/i.exec(label.trim());
+  return m ? Number(m[1]) : null;
+};
+
+/**
+ * Group by level ("N5", "N4", …) when present, otherwise by lesson.
+ * Easier levels come first (N5 before N4); lesson groups keep newest-first order.
+ */
+export function groupBySection(entries: ManifestEntry[]): [string, ManifestEntry[]][] {
+  const map = new Map<string, ManifestEntry[]>();
+  for (const e of entries) {
+    const key = e.level?.trim() || `Lesson ${e.lesson}`;
+    map.set(key, [...(map.get(key) ?? []), e]);
+  }
+  return [...map.entries()].sort(([a], [b]) => {
+    const ra = levelRank(a);
+    const rb = levelRank(b);
+    if (ra !== null && rb !== null) return ra - rb;
+    if (ra !== null) return -1;
+    if (rb !== null) return 1;
+    return b.localeCompare(a, undefined, { numeric: true });
+  });
 }
 
 /** Merge sets into one, prefixing ids with the source id so they stay unique. */

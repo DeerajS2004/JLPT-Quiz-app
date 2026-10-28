@@ -1,5 +1,9 @@
+import "fake-indexeddb/auto";
 import { describe, expect, it } from "vitest";
-import { computeFileAnalysis, fileIdFor, missedQuestionSet, toHistoryEntry, type Attempt, type HistoryEntry } from "./library-store";
+import {
+  computeFileAnalysis, fileIdFor, getFile, masteryFor, missedQuestionSet, saveFile, setFileFolder,
+  sortFiles, toHistoryEntry, type Attempt, type HistoryEntry, type SavedFile,
+} from "./library-store";
 import type { Question, QuestionType, SessionResult } from "./quiz-types";
 
 const q = (id: number, text: string, type: QuestionType = "kanji"): Question =>
@@ -62,5 +66,55 @@ describe("missedQuestionSet", () => {
 
   it("returns an empty set when nothing was missed", () => {
     expect(missedQuestionSet([entry("1", [])]).questions).toEqual([]);
+  });
+});
+
+describe("sortFiles", () => {
+  const file = (title: string, savedAt: string): SavedFile => ({ id: title, title, savedAt, set: { title, questions: [] } });
+  const base = [file("C", "2026-03-01"), file("a", "2026-02-01"), file("B", "2026-01-02")];
+
+  it("newest first puts the latest savedAt first", () => {
+    expect(sortFiles(base, "newest").map((f) => f.title)).toEqual(["C", "a", "B"]);
+  });
+
+  it("oldest first puts the earliest savedAt first", () => {
+    expect(sortFiles(base, "oldest").map((f) => f.title)).toEqual(["B", "a", "C"]);
+  });
+
+  it("A→Z sorts titles case-insensitively", () => {
+    expect(sortFiles(base, "az").map((f) => f.title)).toEqual(["a", "B", "C"]);
+  });
+
+  it("Z→A reverses the A→Z order", () => {
+    expect(sortFiles(base, "za").map((f) => f.title)).toEqual(["C", "B", "a"]);
+  });
+});
+
+describe("setFileFolder", () => {
+  it("sets and clears a folder without losing the file", async () => {
+    await saveFile({ title: "Folder Test", questions: [] });
+    const id = fileIdFor({ title: "Folder Test", questions: [] });
+    await setFileFolder(id, "N5 Kanji");
+    expect((await getFile(id))?.folder).toBe("N5 Kanji");
+    await setFileFolder(id, "   ");
+    expect((await getFile(id))?.folder).toBeUndefined();
+  });
+});
+
+describe("masteryFor", () => {
+  it("marks three right in a row as mastered", () => {
+    expect(masteryFor([true, true, true])).toEqual({ streak: 3, mastery: "mastered" });
+  });
+
+  it("marks a latest miss as struggling even after a long earlier streak", () => {
+    expect(masteryFor([false, true, true, true])).toEqual({ streak: 0, mastery: "struggling" });
+  });
+
+  it("marks accuracy under 50% as struggling even when the latest was right", () => {
+    expect(masteryFor([true, false, false])).toEqual({ streak: 1, mastery: "struggling" });
+  });
+
+  it("marks everything else as learning", () => {
+    expect(masteryFor([true, true, false, true])).toEqual({ streak: 2, mastery: "learning" });
   });
 });

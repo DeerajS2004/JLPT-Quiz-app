@@ -15,3 +15,11 @@
 - [x] Verify save persistence after reload, practice, wrong-only history, and full file analysis.
 - [x] Add a "Practice missed questions" untimed retest from History.
 - [x] Add zip backup export and merge-on-restore on Saved Files; document both and run the tests.
+- [x] Add saved-file sorting and folders.
+- [x] Show mastery stages on the analysis page.
+- [x] Add bulk file management on Saved Files: checkboxes, select all, batch move/export/delete.
+- [x] Add direct Test and Study buttons on each saved-file row.
+- [x] Group bundled sets by JLPT level (N5 first, then N4) on Load Test.
+- [x] Ship N5 and N4 bundle JSON files and the annotated example_structure.json reference.
+- [x] Add subset export (selected files and their attempts) alongside full backup.
+- [x] Overhaul README with screenshots of every tab and the complete JSON format spec; align the in-app Instructions.

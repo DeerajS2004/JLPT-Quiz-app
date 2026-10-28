@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/copy-button";
 import { TYPE_LABELS, QUESTION_TYPES } from "@/lib/quiz-types";
+import exampleStructure from "../../public/quizzes/example_structure.json";
+
+const EXAMPLE_STRUCTURE = JSON.stringify(exampleStructure, null, 2);
 
 export const Route = createFileRoute("/instructions")({
   head: () => ({
@@ -131,22 +134,45 @@ function Instructions() {
         </CardHeader>
         <CardContent className="space-y-3 text-sm leading-relaxed">
           <ol className="list-decimal space-y-2 pl-5">
-            <li>Open <Link to="/load" className="text-hanko underline-offset-4 hover:underline">Load Test</Link> and either choose a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.json</code> file or pick a built-in set.</li>
+            <li>Open <Link to="/load" className="text-hanko underline-offset-4 hover:underline">Load Test</Link> and either choose a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.json</code> file or pick a built-in set. Bundled sets are grouped by JLPT level — N5 first, then N4.</li>
             <li>Set the time limit and press <strong>Start test</strong>.</li>
             <li>Answer each question without seeing the correct answer during the test. Typed answers accept listed alternatives and small spelling differences.</li>
             <li>At the end, review every answer on the <Link to="/results" className="text-hanko underline-offset-4 hover:underline">Results</Link> screen.</li>
             <li>Choose <Link to="/study" className="text-hanko underline-offset-4 hover:underline">Study</Link> from the sidebar for a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring.</li>
             <li>Your latest five detailed results are saved on this device. Deleting a result excludes that test from dashboard statistics.</li>
-            <li>Open <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and choose <strong>Upload to save</strong> to keep one or more JSON files without testing or studying now. Later, select them on Load Test. Files stay on this device until deleted or app/browser storage is cleared.</li>
+            <li>Open <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and choose <strong>Upload to save</strong> to keep one or more JSON files without testing or studying now. Files stay on this device until deleted or app/browser storage is cleared.</li>
+            <li>Each saved file row has direct <strong>Test</strong> and <strong>Study</strong> buttons, plus an <strong>Analysis</strong> link. Sort the list (Newest first, Oldest first, A → Z, Z → A) and move files into folders with the folder button; files with a folder are grouped under its name, everything else sits under "No folder".</li>
+            <li>Tick the checkbox beside any file (or <strong>Select all</strong>) to work in bulk: <strong>Move to folder</strong>, <strong>Export selected</strong> (a zip containing just those files and their attempts), or <strong>Delete selected</strong> — each deletion asks for confirmation and can include attempts and analysis.</li>
+            <li>Use <strong>Export backup</strong> for everything instead: all saved files, attempts, history, and statistics. <strong>Restore backup</strong> merges a backup back in — on this device or another — without removing what is already there.</li>
             <li><Link to="/history" className="text-hanko underline-offset-4 hover:underline">History</Link> lists all test names and marks and stores only wrong answers. Delete an entry or clear history to exclude those tests from dashboard statistics.</li>
             <li>Press <strong>Practice missed</strong> on the History tab for an untimed retest built only from questions you got wrong across tests, most-missed first. Its result counts for statistics like any test.</li>
-            <li>Use <strong>Export backup</strong> on Saved Files to download a zip of all saved files, attempts, history, and statistics; <strong>Restore backup</strong> merges it back in — on this device or another — without removing what is already there.</li>
-            <li>Choose <strong>Analysis</strong> beside a saved file for all its attempts, marks, right and wrong answers, score trends, and per-question accuracy. Deleting a saved file lets you also delete its attempts and analysis.</li>
+            <li>Choose <strong>Analysis</strong> beside a saved file for all its attempts, marks, right and wrong answers, score trends, and per-question accuracy. Each question shows a Mastered / Learning / Struggling badge — mastered after three right answers in a row, struggling after a miss or below 50% accuracy. Deleting a saved file lets you also delete its attempts and analysis.</li>
           </ol>
           <div className="pt-2">
             <Button asChild>
               <Link to="/load"><BookOpen className="mr-2 h-4 w-4" /> Load a test</Link>
             </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="font-display">Reference file — example_structure.json</CardTitle>
+          <CardDescription>
+            Every category, both answer formats, and every optional field in one file. Copy or download it and use it as the template for your own quiz files.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-sm">
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline">
+              <a href="/quizzes/example_structure.json" download="example_structure.json">
+                <Download className="mr-2 h-4 w-4" /> Download example_structure.json
+              </a>
+            </Button>
+          </div>
+          <div className="max-h-[32rem] overflow-y-auto rounded-md">
+            <Code>{EXAMPLE_STRUCTURE}</Code>
           </div>
         </CardContent>
       </Card>

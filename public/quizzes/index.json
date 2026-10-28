@@ -1,10 +1,1 @@
-[
-  {
-    "id": "n5-kanji",
-    "lesson": 1,
-    "type": "kanji",
-    "url": "/quizzes/jlpt_n5_kanji_all.json",
-    "title": "JLPT N5 Kanji — Complete Set",
-    "description": "N5 kanji meanings and readings."
-  }
-]
+[{"id": "n5-kanji", "level": "N5", "lesson": 1, "type": "kanji", "url": "/quizzes/jlpt_n5_kanji_all.json", "title": "JLPT N5 Kanji — Complete Set", "description": "110 N5 kanji meanings and readings."}, {"id": "n5-vocab", "level": "N5", "lesson": 2, "type": "vocabulary", "url": "/quizzes/n5/n5_vocabulary.json", "title": "JLPT N5 Vocabulary — Everyday Words", "description": "Common N5 words for people, places, actions, and daily life."}, {"id": "n5-grammar", "level": "N5", "lesson": 3, "type": "grammar", "url": "/quizzes/n5/n5_grammar.json", "title": "JLPT N5 Grammar — Particles & Patterns", "description": "Basic particles, verb forms, and sentence patterns."}, {"id": "n4-kanji", "level": "N4", "lesson": 4, "type": "kanji", "url": "/quizzes/n4/n4_kanji.json", "title": "JLPT N4 Kanji", "description": "N4 kanji meanings and readings."}, {"id": "n4-vocab", "level": "N4", "lesson": 5, "type": "vocabulary", "url": "/quizzes/n4/n4_vocabulary.json", "title": "JLPT N4 Vocabulary", "description": "N4 words, including typed-answer questions."}, {"id": "n4-grammar", "level": "N4", "lesson": 6, "type": "grammar", "url": "/quizzes/n4/n4_grammar.json", "title": "JLPT N4 Grammar", "description": "N4 particles, conjunctions, and sentence patterns."}]

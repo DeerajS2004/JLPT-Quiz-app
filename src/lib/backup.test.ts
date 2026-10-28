@@ -33,8 +33,13 @@ const historyEntry = (id: string): HistoryEntry => ({
 
 beforeAll(async () => {
   await saveFile(set);
+  await saveFile({ ...set, title: "Backup Test 2" });
   await saveAttempt({
     id: "a1", fileId: "backup-test", date: "2026-10-22T10:00:00Z", durationSec: 5, total: 2, correct: 1,
+    questions: set.questions, answers: [{ questionId: 1, selected: 0, correct: true, timeMs: 1 }],
+  });
+  await saveAttempt({
+    id: "a2", fileId: "backup-test-2", date: "2026-10-22T11:00:00Z", durationSec: 5, total: 2, correct: 2,
     questions: set.questions, answers: [{ questionId: 1, selected: 0, correct: true, timeMs: 1 }],
   });
   addHistory(historyEntry("h1"));
@@ -44,19 +49,20 @@ beforeAll(async () => {
 describe("backup round trip", () => {
   it("exports and restores files, attempts, history, and ledger", async () => {
     const { blob, summary } = await exportBackup();
-    expect(summary).toMatchObject({ files: 1, attempts: 1, history: 1, ledger: 1 });
+    expect(summary).toMatchObject({ files: 2, attempts: 2, history: 1, ledger: 1 });
 
     // Wipe the local data, then restore from the zip.
     await deleteFile("backup-test", true);
+    await deleteFile("backup-test-2", true);
     addHistory({ ...historyEntry("h0"), id: "h0" }); // local entry that must survive the restore
     expect(await listFiles()).toHaveLength(0);
     expect(await listAllAttempts()).toHaveLength(0);
 
     const restored = await restoreBackup(blob);
-    expect(restored).toMatchObject({ files: 1, attempts: 1, history: 1, ledger: 1 });
+    expect(restored).toMatchObject({ files: 2, attempts: 2, history: 1, ledger: 1 });
 
-    expect(await listFiles()).toHaveLength(1);
-    expect(await listAllAttempts()).toHaveLength(1);
+    expect(await listFiles()).toHaveLength(2);
+    expect(await listAllAttempts()).toHaveLength(2);
     const history = loadHistory();
     expect(history.map((h) => h.id).sort()).toEqual(["h0", "h1"]);
     expect(loadLedger().map((e) => e.id)).toContain("h1");
@@ -68,5 +74,18 @@ describe("backup round trip", () => {
     zip.file("readme.txt", "not a backup");
     const blob = await zip.generateAsync({ type: "blob" });
     await expect(restoreBackup(blob)).rejects.toThrow(/No JSON entries/);
+  });
+
+  it("exports only the selected files and their attempts", async () => {
+    const { blob, summary, name } = await exportBackup(["backup-test-2"]);
+    expect(name).toMatch(/^jlpt-files-backup-/);
+    expect(summary).toMatchObject({ files: 1, attempts: 1, history: 0, ledger: 0 });
+
+    // A subset zip restores just those files, leaving the rest of the library alone.
+    await deleteFile("backup-test-2", true);
+    expect(await listFiles().then((f) => f.map((x) => x.id))).toEqual(["backup-test"]);
+    await restoreBackup(blob);
+    expect((await listFiles()).map((f) => f.id).sort()).toEqual(["backup-test", "backup-test-2"]);
+    expect((await listAllAttempts()).map((a) => a.fileId).sort()).toEqual(["backup-test", "backup-test-2"]);
   });
 });
