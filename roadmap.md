@@ -18,6 +18,7 @@
 - [x] Add saved-file sorting and folders.
 - [x] Show mastery stages on the analysis page.
 - [x] Add bulk file management on Saved Files: checkboxes, select all, batch move/export/delete.
+- [x] OS-style file explorer on Saved Files: nested folders, breadcrumbs, up-level, new folder, grid/list view.
 - [x] Add direct Test and Study buttons on each saved-file row.
 - [x] Group bundled sets by JLPT level (N5 first, then N4) on Load Test.
 - [x] Ship N5 and N4 bundle JSON files and the annotated example_structure.json reference.

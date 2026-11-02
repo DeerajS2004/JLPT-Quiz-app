@@ -61,9 +61,13 @@ Pick bundled sets (grouped by JLPT level, N5 first) and/or upload one or more lo
 
 ### Saved Files
 
-Your offline question library. Upload to save without starting anything; each row has direct **Test**, **Study**, and **Analysis** buttons. Sort the list, move files into folders (single or batch), select many for bulk export/delete, and export or restore full backups. Deleting a file can optionally delete its attempts and analysis.
+Your offline question library, laid out like an OS file manager. Folders appear as icons; click to open them, nest subfolders to any depth (e.g. `JAPAN/JSON/Tobira I`), and navigate with the clickable breadcrumb bar or the up-one-level arrow. Create empty folders with **New folder** and toggle grid / list view. Upload to save without starting anything; each file has direct **Test**, **Study**, and **Analysis** buttons. Sort files, move them into folder paths (single or batch), select many for bulk export/delete, and export or restore full backups (folders included). Deleting a file can optionally delete its attempts and analysis.
 
 ![Saved Files](docs/screenshots/saved-files.png)
+
+Inside a folder — the breadcrumb shows where you are, and subfolders and files are listed together:
+
+![Saved Files inside a folder](docs/screenshots/saved-files-inside.png)
 
 ### Quiz
 

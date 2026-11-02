@@ -1,3 +1,4 @@
+import { normalizePath } from "./folders";
 import type { AnswerRecord, Question, QuestionSet, SessionResult } from "./quiz-types";
 
 /* ---------------- History (marks + wrong answers only, localStorage) ---------------- */
@@ -97,14 +98,40 @@ export async function saveFile(set: QuestionSet): Promise<SavedFile> {
   return file;
 }
 
-/** Move a file into a folder; empty name = no folder. */
+/** Move a file into a folder path ("A/B" for subfolders); empty = no folder. */
 export async function setFileFolder(id: string, folder: string) {
   const f = await getFile(id);
   if (!f) return;
-  const name = folder.trim();
+  const name = normalizePath(folder);
   const next: SavedFile = { ...f };
   if (name) next.folder = name; else delete next.folder;
   await tx("files", "readwrite", (s) => { s.put(next); });
+}
+
+/* ------------- Empty folder registrations (localStorage, paths only) ------------- */
+
+const FOLDERS_KEY = "jlpt.folders";
+
+export function listFolders(): string[] {
+  return read<string[]>(FOLDERS_KEY, []).map(normalizePath).filter(Boolean);
+}
+
+/** Register a folder path so it shows even with no files inside. */
+export function addFolder(path: string): string[] {
+  if (typeof window === "undefined") return [];
+  const p = normalizePath(path);
+  const next = p && !listFolders().includes(p) ? [...listFolders(), p] : listFolders();
+  localStorage.setItem(FOLDERS_KEY, JSON.stringify(next));
+  return next;
+}
+
+/** Drop a folder registration; saved files are never touched. */
+export function removeFolder(path: string): string[] {
+  if (typeof window === "undefined") return [];
+  const p = normalizePath(path);
+  const next = listFolders().filter((f) => f !== p);
+  localStorage.setItem(FOLDERS_KEY, JSON.stringify(next));
+  return next;
 }
 
 export type FileSort = "newest" | "oldest" | "az" | "za";

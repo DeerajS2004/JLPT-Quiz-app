@@ -1,7 +1,9 @@
 import JSZip from "jszip";
 import {
+  addFolder,
   listAllAttempts,
   listFiles,
+  listFolders,
   loadHistory,
   mergeHistory,
   putAttempt,
@@ -17,6 +19,7 @@ export interface BackupSummary {
   attempts: number;
   history: number;
   ledger: number;
+  folders: number;
 }
 
 const safeName = (id: string) => id.replace(/[/\\:*?"<>|]/g, "_");
@@ -32,19 +35,22 @@ export async function exportBackup(ids?: string[]): Promise<{ name: string; blob
   const attempts = ids ? allAttempts.filter((a) => ids.includes(a.fileId)) : allAttempts;
   const history = ids ? [] : loadHistory();
   const ledger = ids ? [] : loadLedger();
+  const folders = ids ? [] : listFolders();
   const summary: BackupSummary = {
     files: files.length, attempts: attempts.length, history: history.length, ledger: ledger.length,
+    folders: folders.length,
   };
 
   const zip = new JSZip();
   zip.file("manifest.json", JSON.stringify({
-    app: "jlpt-practice", version: 1, exportedAt: new Date().toISOString(), counts: summary,
+    app: "jlpt-practice", version: 2, exportedAt: new Date().toISOString(), counts: summary,
     scope: ids ? "files" : "all",
   }));
   for (const file of files) zip.file(`files/${safeName(file.id)}.json`, JSON.stringify(file));
   for (const attempt of attempts) zip.file(`attempts/${safeName(attempt.fileId)}/${safeName(attempt.id)}.json`, JSON.stringify(attempt));
   if (history.length) zip.file("history.json", JSON.stringify(history));
   if (ledger.length) zip.file("ledger.json", JSON.stringify(ledger));
+  if (folders.length) zip.file("folders.json", JSON.stringify(folders));
 
   const blob = await zip.generateAsync({ type: "blob" });
   const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, "-");
@@ -82,7 +88,7 @@ const asLedgerEntry = (v: unknown): LedgerEntry | null => {
 /** Restore a backup zip, merging by id — existing entries stay, new ones are added. */
 export async function restoreBackup(archive: Blob | File): Promise<BackupSummary> {
   const zip = await JSZip.loadAsync(await archive.arrayBuffer());
-  const summary: BackupSummary = { files: 0, attempts: 0, history: 0, ledger: 0 };
+  const summary: BackupSummary = { files: 0, attempts: 0, history: 0, ledger: 0, folders: 0 };
 
   const jsonEntries = Object.values(zip.files).filter((f) => !f.dir && f.name.endsWith(".json"));
   if (jsonEntries.length === 0) throw new Error("No JSON entries found — is this a JLPT Practice backup?");
@@ -105,6 +111,11 @@ export async function restoreBackup(archive: Blob | File): Promise<BackupSummary
       const entries = parseZipEntry(raw, (v) => (Array.isArray(v) ? v : null), "ledger");
       mergeLedger(entries.map(asLedgerEntry).filter((e): e is LedgerEntry => e !== null));
       summary.ledger = entries.length;
+    } else if (entry.name === "folders.json") {
+      const entries = parseZipEntry(raw, (v) => (Array.isArray(v) ? v : null), "folders");
+      const paths = entries.filter((p): p is string => typeof p === "string");
+      for (const p of paths) addFolder(p);
+      summary.folders = paths.length;
     }
     // manifest.json and unknown entries are skipped.
   }
