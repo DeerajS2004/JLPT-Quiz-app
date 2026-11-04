@@ -55,7 +55,7 @@ Track progress: lifetime accuracy, sessions completed, daily streak, questions a
 
 ### Load Test
 
-Pick bundled sets (grouped by JLPT level, N5 first) and/or upload one or more local JSON files, order them in the queue, choose 10 / 20 / 50 / All questions per set, set the time limit, then **Start test** or **Study sets**. Multiple sets run one after another.
+Pick bundled sets (grouped by JLPT level, N5 first) and/or upload one or more local JSON files — click to choose, or drag & drop `.json` files from your file manager straight onto the drop box. Order the queue with the up/down arrows and remove a set with ✕, choose 10 / 20 / 50 / All questions per set, and set the time limit one of three ways: the **same limit for each set**, a **different limit per set** (a minutes box appears next to each set), or **one total limit for all sets combined**. Then **Start test** or **Study sets**; multiple sets run one after another in the order shown.
 
 ![Load Test](docs/screenshots/load.png)
 
@@ -397,7 +397,7 @@ Use **Reset all progress** at the bottom of the Dashboard, or clear Electron's p
 
 ## Japanese IME note
 
-Pressing Enter while the IME (e.g. Mozc) is still composing won't submit the answer. The 1–9 keys pick options by physical key, so they work whatever your keyboard layout.
+Pressing Enter while the IME (e.g. Mozc) is still composing won't submit the answer. The 1–9 keys pick options by physical key, so they work whatever your keyboard layout. Anywhere in the app, **Alt + ←** goes back and **Alt + →** goes forward, just like browser history.
 
 ---
 

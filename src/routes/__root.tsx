@@ -114,6 +114,21 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        window.history.back();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        window.history.forward();
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <SidebarProvider>

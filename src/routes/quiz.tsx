@@ -76,9 +76,14 @@ function QuizScreen() {
       const queue = a.queue ?? [];
       if (!exitAll && queue.length > 0) {
         const [nextSet, ...rest] = queue;
+        const [nextDur, ...restDur] = a.queueDurations ?? [];
+        const durationSec = a.deadlineAt
+          ? Math.max(1, Math.round((a.deadlineAt - Date.now()) / 1000))
+          : (nextDur ?? a.durationSec);
         const next: ActiveSession = {
-          set: nextSet, startedAt: Date.now(), durationSec: a.durationSec,
+          set: nextSet, startedAt: Date.now(), durationSec,
           answers: [], currentIndex: 0, queue: rest, lastSavedId: savedId,
+          queueDurations: a.queueDurations ? restDur : undefined, deadlineAt: a.deadlineAt,
         };
         saveActive(next);
         setActive(next);
@@ -101,7 +106,7 @@ function QuizScreen() {
 
   useEffect(() => {
     if (active && timeLeft === 0 && active.durationSec > 0) {
-      finish(active);
+      finish(active, true, !!active.deadlineAt);
     }
   }, [active, timeLeft, finish]);
 

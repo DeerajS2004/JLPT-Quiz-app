@@ -62,7 +62,7 @@ export function groupBySection(entries: ManifestEntry[]): [string, ManifestEntry
   return [...map.entries()].sort(([a], [b]) => {
     const ra = levelRank(a);
     const rb = levelRank(b);
-    if (ra !== null && rb !== null) return ra - rb;
+    if (ra !== null && rb !== null) return rb - ra;
     if (ra !== null) return -1;
     if (rb !== null) return 1;
     return b.localeCompare(a, undefined, { numeric: true });

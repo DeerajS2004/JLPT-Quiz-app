@@ -134,10 +134,11 @@ function Instructions() {
         </CardHeader>
         <CardContent className="space-y-3 text-sm leading-relaxed">
           <ol className="list-decimal space-y-2 pl-5">
-            <li>Open <Link to="/load" className="text-hanko underline-offset-4 hover:underline">Load Test</Link> and either choose a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.json</code> file or pick a built-in set. Bundled sets are grouped by JLPT level — N5 first, then N4.</li>
-            <li>Set the time limit and press <strong>Start test</strong>.</li>
+            <li>Open <Link to="/load" className="text-hanko underline-offset-4 hover:underline">Load Test</Link> and either choose a <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-xs">.json</code> file — or drag & drop files from your file manager onto the box — or pick a built-in set. Bundled sets are grouped by JLPT level — N5 first, then N4. Saved files live on <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and each one there has its own <strong>Test</strong> and <strong>Study</strong> buttons.</li>
+            <li>When several sets are queued, reorder them with the up and down arrows and remove one with the ✕ button. Choose the time limit style: <strong>same for each set</strong>, <strong>different per set</strong> (a minutes box appears beside each set), or <strong>total for all sets combined</strong>. Then press <strong>Start test</strong>.</li>
             <li>Answer each question without seeing the correct answer during the test. Typed answers accept listed alternatives and small spelling differences.</li>
             <li>At the end, review every answer on the <Link to="/results" className="text-hanko underline-offset-4 hover:underline">Results</Link> screen.</li>
+            <li>Navigate like in a browser: <strong>Alt + ←</strong> goes back and <strong>Alt + →</strong> goes forward.</li>
             <li>Choose <Link to="/study" className="text-hanko underline-offset-4 hover:underline">Study</Link> from the sidebar for a single scrolling page showing every question with its answer and explanation, with search and no timer or scoring.</li>
             <li>Your latest five detailed results are saved on this device. Deleting a result excludes that test from dashboard statistics.</li>
             <li>Open <Link to="/saved-files" className="text-hanko underline-offset-4 hover:underline">Saved Files</Link> and choose <strong>Upload to save</strong> to keep one or more JSON files without testing or studying now. Files stay on this device until deleted or app/browser storage is cleared.</li>

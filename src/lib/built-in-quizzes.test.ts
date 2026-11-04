@@ -22,3 +22,14 @@ describe("library", () => {
     expect(g[0][0]).toBe(3);
   });
 });
+
+describe("groupBySection", () => {
+  it("lists easier levels first (N5 before N4)", () => {
+    const entries = [
+      { id: "n4-kanji", level: "N4", lesson: 4, type: "kanji", url: "/a", title: "N4 Kanji" },
+      { id: "n5-vocab", level: "N5", lesson: 2, type: "vocabulary", url: "/b", title: "N5 Vocab" },
+    ] as never[];
+    const [first] = groupBySection(entries);
+    expect(first[0]).toBe("N5");
+  });
+});

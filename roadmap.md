@@ -24,3 +24,5 @@
 - [x] Ship N5 and N4 bundle JSON files and the annotated example_structure.json reference.
 - [x] Add subset export (selected files and their attempts) alongside full backup.
 - [x] Overhaul README with screenshots of every tab and the complete JSON format spec; align the in-app Instructions.
+- [x] Load Test: drag & drop JSON, remove saved-files list, reorder sets, per-set/same/total time limits
+- [x] Alt+←/→ back/forward navigation

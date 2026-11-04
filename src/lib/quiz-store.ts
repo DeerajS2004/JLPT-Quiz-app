@@ -171,6 +171,10 @@ export interface ActiveSession {
   queue?: QuestionSet[];
   /** Id of the most recently saved result in this run. */
   lastSavedId?: string;
+  /** Time limits (sec) for each queued set, in queue order. */
+  queueDurations?: number[];
+  /** Absolute end time (ms) when one total limit covers all sets. */
+  deadlineAt?: number;
 }
 
 export function loadActive(): ActiveSession | null {
